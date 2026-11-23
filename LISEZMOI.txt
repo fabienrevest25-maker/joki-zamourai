@@ -1,4 +1,4 @@
-JŌKI ZAMURAI - projet Android (version 0.297)
+JŌKI ZAMURAI - projet Android (version 0.298)
 
 Ce dossier contient tout ce qu'il faut pour fabriquer l'application. Il n'est pas
 encore compilé : la compilation se fait sur GitHub (gratuit, depuis le téléphone)
@@ -14,6 +14,7 @@ OPTION A - GitHub, sans rien installer
      sur ordinateur : glisser-déposer).
  3. Onglet Actions > "Build APK". La fabrication démarre toute seule (5 minutes).
  4. Quand la pastille est verte, ouvre l'exécution et télécharge "JokiZamurai-apk".
+    (L'APK est aussi rangé tout seul dans la branche "apk" du dépôt : JokiZamurai.apk.)
  5. Décompresse, ouvre app-debug.apk sur le téléphone et accepte
     "installer des applications inconnues".
 
