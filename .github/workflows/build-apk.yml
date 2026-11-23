@@ -25,7 +25,7 @@ jobs:
           ls -l index.html
       - name: Clé de signature fixe (les mises à jour s'installent par-dessus l'ancienne version)
         env:
-          JZ_KEY_PASS: ${{ secrets.JZ_KEY_PASS }}
+          JZ_KEY_PASS: ${{ secrets.JZ_KEY_PASS || secrets.JZ_KAY_PASS }}
         run: |
           if [ -n "$JZ_KEY_PASS" ] && [ -f signing/jz_debug.keystore.enc ]; then
             mkdir -p ~/.android
