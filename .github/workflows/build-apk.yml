@@ -23,6 +23,17 @@ jobs:
           cd app/src/main/assets
           if ls index.part* >/dev/null 2>&1; then cat index.part* > index.html && rm index.part*; fi
           ls -l index.html
+      - name: Clé de signature fixe (les mises à jour s'installent par-dessus l'ancienne version)
+        env:
+          JZ_KEY_PASS: ${{ secrets.JZ_KEY_PASS }}
+        run: |
+          if [ -n "$JZ_KEY_PASS" ] && [ -f signing/jz_debug.keystore.enc ]; then
+            mkdir -p ~/.android
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in signing/jz_debug.keystore.enc -out ~/.android/debug.keystore -pass env:JZ_KEY_PASS
+            echo "Clé fixe utilisée."
+          else
+            echo "::warning::Secret JZ_KEY_PASS absent : l'APK est signé avec une clé aléatoire et ne pourra pas mettre à jour l'appli déjà installée."
+          fi
       - run: gradle assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
