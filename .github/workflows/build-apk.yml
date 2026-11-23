@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
-      - uses: android-actions/setup-android@v3
+      # Le SDK Android est déjà installé sur les machines GitHub (ubuntu-latest).
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: '8.7' }
       - name: Embarquer les polices (facultatif, le jeu marche sans)
