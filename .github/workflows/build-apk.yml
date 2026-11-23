@@ -1,0 +1,27 @@
+name: Build APK
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: '8.7' }
+      - name: Embarquer les polices (facultatif, le jeu marche sans)
+        continue-on-error: true
+        run: bash tools/polices.sh
+      - name: Recoller le jeu (index.html envoyé en morceaux de 20 Mo)
+        run: |
+          cd app/src/main/assets
+          if ls index.part* >/dev/null 2>&1; then cat index.part* > index.html && rm index.part*; fi
+          ls -l index.html
+      - run: gradle assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JokiZamurai-apk
+          path: app/build/outputs/apk/debug/app-debug.apk

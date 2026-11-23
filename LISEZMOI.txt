@@ -1,0 +1,43 @@
+JŌKI ZAMURAI - projet Android (version 0.297)
+
+Ce dossier contient tout ce qu'il faut pour fabriquer l'application. Il n'est pas
+encore compilé : la compilation se fait sur GitHub (gratuit, depuis le téléphone)
+ou avec Android Studio (sur ordinateur).
+
+OPTION A - GitHub, sans rien installer
+ 1. Crée un compte sur github.com, puis un dépôt PRIVÉ (bouton New).
+ 2. Envoie-y tout le contenu de ce dossier, y compris le dossier caché .github
+    (le jeu est découpé en fichiers index.part01, index.part02... de 20 Mo, car
+     GitHub refuse les fichiers de plus de 25 Mo envoyés depuis le navigateur ;
+     GitHub les recolle tout seul pendant la fabrication)
+    (sur téléphone : appli GitHub ou "Add file > Upload files" en mode ordinateur ;
+     sur ordinateur : glisser-déposer).
+ 3. Onglet Actions > "Build APK". La fabrication démarre toute seule (5 minutes).
+ 4. Quand la pastille est verte, ouvre l'exécution et télécharge "JokiZamurai-apk".
+ 5. Décompresse, ouvre app-debug.apk sur le téléphone et accepte
+    "installer des applications inconnues".
+
+OPTION B - Android Studio
+ Recolle d'abord le jeu dans app/src/main/assets :
+   Windows : copy /b index.part01+index.part02+index.part03+index.part04 index.html
+   Mac/Linux : cat index.part* > index.html
+ puis supprime les fichiers index.part*.
+ Ouvre ce dossier, attends la synchronisation, puis Build > Build APK(s).
+ Le fichier est dans app/build/outputs/apk/debug/.
+
+CE QUE L'APPLI APPORTE PAR RAPPORT À LA PAGE WEB
+ - Voix japonaise du téléphone (lecture normale et lente), sans dépendre du navigateur.
+ - Micro pour l'exercice "Prononcer" (l'autorisation est demandée au premier usage).
+ - Plein écran, écran toujours allumé, bouton Retour qui ferme le menu.
+ - Sauvegarde conservée dans l'appli.
+ - Le bouton "Démon" (discussion par IA) est masqué : il ne fonctionne que sur claude.ai.
+
+METTRE LE JEU À JOUR
+ Remplace app/src/main/assets/index.html par la nouvelle version fournie, et
+ augmente versionCode dans app/build.gradle. La sauvegarde est conservée.
+
+PLAY STORE (plus tard)
+ L'APK "debug" sert aux tests. Pour publier il faut une version "release" signée :
+ crée une clé (keytool), renseigne JZ_KEYSTORE, JZ_STORE_PASSWORD, JZ_KEY_ALIAS,
+ JZ_KEY_PASSWORD, puis lance "gradle bundleRelease". L'icône 512 px demandée par
+ le Play Store est fournie : play_store_icon_512.png.

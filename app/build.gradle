@@ -1,0 +1,32 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.jokizamurai.game'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'com.jokizamurai.game'
+        minSdk 26
+        targetSdk 34
+        versionCode 297
+        versionName '0.297'
+    }
+    signingConfigs {
+        release {
+            // Pour le Play Store : renseigne ces 4 valeurs dans ~/.gradle/gradle.properties ou en variables d'environnement.
+            def ks = System.getenv('JZ_KEYSTORE') ?: project.findProperty('JZ_KEYSTORE')
+            if (ks) {
+                storeFile file(ks)
+                storePassword System.getenv('JZ_STORE_PASSWORD') ?: project.findProperty('JZ_STORE_PASSWORD')
+                keyAlias System.getenv('JZ_KEY_ALIAS') ?: project.findProperty('JZ_KEY_ALIAS')
+                keyPassword System.getenv('JZ_KEY_PASSWORD') ?: project.findProperty('JZ_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            if (signingConfigs.release.storeFile) signingConfig signingConfigs.release
+        }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    androidResources { noCompress 'html' }
+}
