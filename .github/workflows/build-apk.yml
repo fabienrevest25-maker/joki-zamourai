@@ -28,8 +28,9 @@ jobs:
           JZ_KEY_PASS: ${{ secrets.JZ_KEY_PASS || secrets.JZ_KAY_PASS }}
         run: |
           if [ -n "$JZ_KEY_PASS" ] && [ -f signing/jz_debug.keystore.enc ]; then
-            mkdir -p ~/.android
-            openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in signing/jz_debug.keystore.enc -out ~/.android/debug.keystore -pass env:JZ_KEY_PASS
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in signing/jz_debug.keystore.enc -out "$RUNNER_TEMP/jz.keystore" -pass env:JZ_KEY_PASS
+            echo "JZ_DEBUG_KS=$RUNNER_TEMP/jz.keystore" >> "$GITHUB_ENV"
+            keytool -list -v -keystore "$RUNNER_TEMP/jz.keystore" -storepass android | grep -m1 "SHA256:"
             echo "Clé fixe utilisée."
           else
             echo "::warning::Secret JZ_KEY_PASS absent : l'APK est signé avec une clé aléatoire et ne pourra pas mettre à jour l'appli déjà installée."
