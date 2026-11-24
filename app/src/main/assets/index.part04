@@ -12227,6 +12227,29 @@ window.UIS=(()=>{
  html.skin #banner{border-width:calc(3*var(--u))!important;border-image:var(--uiF) 66 / calc(8*var(--u)) / calc(1.5*var(--u)) stretch!important}
  html.skin #dCh .btn{border-style:solid!important;border-color:transparent!important;border-width:9px!important;border-image:var(--uiB) 30 fill / 10px stretch!important;background:none!important;border-radius:0!important;box-shadow:0 2px 3px rgba(0,0,0,.4)!important}
  html.skin #dCh .btn:active{border-image-source:var(--uiBP)!important}
+ html.skin #pBat{background:linear-gradient(rgba(10,14,30,.15),rgba(0,0,8,.45)),var(--uiX) 0 0/430px auto repeat,#161d38!important;border-top:0!important;
+  border-image:var(--uiF) 36 0 0 0 / calc(4*var(--u)) 0 0 0 stretch!important;border-style:solid!important;border-width:calc(4*var(--u)) 0 0 0!important;box-shadow:inset 0 calc(4*var(--u)) calc(8*var(--u)) rgba(0,0,8,.55)!important}
+ html.skin #bInfo{background:rgba(6,9,22,.45);border-radius:6px;padding:4px 8px;box-shadow:inset 0 0 0 1px rgba(200,150,70,.25)}
+ #bCmd.cmd .btn::before{transition:rotate .25s cubic-bezier(.3,1.6,.5,1);filter:drop-shadow(0 calc(.8*var(--q)) calc(.6*var(--q)) rgba(0,0,0,.55))}
+ #bCmd.cmd .btn::after{transition:box-shadow .2s}
+ @media (prefers-reduced-motion:no-preference){
+  #bCmd.cmd .btn:not(.off)::before{animation:gTick 3.2s cubic-bezier(.4,1.8,.6,1) infinite!important}
+  #bCmd.cmd .c1:not(.off)::before{animation-name:gTickR!important}
+  #bCmd.cmd .btn:not(.off)::after{animation:gGlow 2.6s ease-in-out infinite}
+  #bCmd.cmd .c2::after{animation-delay:-.5s!important}#bCmd.cmd .c3::after{animation-delay:-1s!important}#bCmd.cmd .c4::after{animation-delay:-1.5s!important}#bCmd.cmd .c5::after{animation-delay:-2s!important}
+  #bCmd.cmd.gIn .btn{animation:gRoll .5s cubic-bezier(.2,.9,.3,1.25) both}
+  #bCmd.cmd.gIn .c1{animation:gSpin .55s cubic-bezier(.2,.9,.3,1.3) both}
+  #bCmd.cmd.gIn .c2{--gx:85%;--gy:70%;animation-delay:.08s}#bCmd.cmd.gIn .c3{--gx:-85%;--gy:70%;animation-delay:.13s}
+  #bCmd.cmd.gIn .c4{--gx:85%;--gy:-70%;animation-delay:.18s}#bCmd.cmd.gIn .c5{--gx:-85%;--gy:-70%;animation-delay:.23s}
+  #bCmd.cmd .btn.gHit{animation:gHit .38s ease-out}
+  #bCmd.cmd .btn.gHit::before{rotate:60deg;animation:none!important}
+  #bCmd.cmd .c1.gHit::before{rotate:-60deg}}
+ @keyframes gTick{0%,78%{rotate:0deg}100%{rotate:30deg}}
+ @keyframes gTickR{0%,78%{rotate:0deg}100%{rotate:-30deg}}
+ @keyframes gGlow{0%,100%{box-shadow:inset 0 0 0 calc(.5*var(--q)) #0a0d18,inset 0 0 calc(4*var(--q)) rgba(0,0,0,.6),0 0 calc(1*var(--q)) var(--c)}50%{box-shadow:inset 0 0 0 calc(.5*var(--q)) #0a0d18,inset 0 0 calc(4*var(--q)) rgba(0,0,0,.6),0 0 calc(4*var(--q)) var(--c)}}
+ @keyframes gRoll{0%{opacity:0;translate:var(--gx,0) var(--gy,0);scale:.35;rotate:-160deg}70%{opacity:1;scale:1.06}100%{translate:0 0;scale:1;rotate:0deg}}
+ @keyframes gSpin{0%{opacity:0;scale:.2;rotate:200deg;filter:brightness(2)}65%{opacity:1;scale:1.08;filter:brightness(1.3)}100%{scale:1;rotate:0deg;filter:none}}
+ @keyframes gHit{0%{scale:1;filter:brightness(1)}30%{scale:.9;filter:brightness(1.7)}100%{scale:1;filter:brightness(1)}}
  @media (prefers-reduced-motion:no-preference){
   html.skin #dCh.uiO .btn{animation:uiItem .26s ease-out both}html.skin #dCh.uiO .btn:nth-child(2){animation-delay:.06s}html.skin #dCh.uiO .btn:nth-child(3){animation-delay:.12s}html.skin #dCh.uiO .btn:nth-child(n+4){animation-delay:.18s}
   html.skin #study.uiS>*{animation:uiSwap .22s ease-out both}}
@@ -12266,6 +12289,8 @@ window.UIS=(()=>{
      if(performance.now()-(last.get(el)||-1e9)<160)T(el,'uiS',230);else T(el,'uiO',460);
      if(el.id==='dlg'){const n=document.getElementById('dlgN');if(n&&n.textContent.trim())T(n,'uiP',460)}}}).observe(el,{attributes:true,attributeFilter:['class']})}
   const pp=document.getElementById('pPad'),dc=document.getElementById('dCh');if(pp&&dc){let a=pp.classList.contains('ask');new MutationObserver(()=>{const b=pp.classList.contains('ask');if(b&&!a)T(dc,'uiO',520);a=b}).observe(pp,{attributes:true,attributeFilter:['class']})}
+  const bc=document.getElementById('bCmd');if(bc){let hd=bc.classList.contains('hidden');new MutationObserver(()=>{const h=bc.classList.contains('hidden');if(!h&&hd)T(bc,'gIn',800);hd=h}).observe(bc,{attributes:true,attributeFilter:['class']});
+   bc.addEventListener('pointerdown',e=>{const b=e.target.closest('.btn');if(b&&!b.classList.contains('off'))T(b,'gHit',400)},true)}
   const sd=document.getElementById('study');if(sd)new MutationObserver(()=>T(sd,'uiS',260)).observe(sd,{childList:true});
   const n=document.getElementById('dlgN');if(n){let tx=n.textContent;new MutationObserver(()=>{const t=n.textContent;if(t===tx)return;tx=t;const d=document.getElementById('dlg');if(t.trim()&&d&&!d.classList.contains('hidden'))T(n,'uiP',460)}).observe(n,{childList:true,characterData:true,subtree:true})}}
  if(!apply()){let k=0;const iv=setInterval(()=>{if(apply()||++k>240)clearInterval(iv)},500)}
