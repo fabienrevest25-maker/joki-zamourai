@@ -12226,26 +12226,24 @@ window.UIS=(()=>{
  html.skin #study,html.skin #banner{border-style:solid!important;border-color:transparent!important;border-width:8px!important;border-image:var(--uiF) 66 / 19px / 4px stretch!important;border-radius:0!important;
   background:linear-gradient(rgba(150,170,255,.05),rgba(0,0,10,.22)),var(--uiX) 0 0/440px auto repeat,#161d38!important;background-clip:padding-box!important;box-shadow:inset 0 0 16px rgba(0,0,8,.6),0 3px 6px rgba(0,0,0,.4)!important}
  html.skin #banner{border-width:calc(3*var(--u))!important;border-image:var(--uiF) 66 / calc(8*var(--u)) / calc(1.5*var(--u)) stretch!important}
- html.skin #dCh .btn{border-style:solid!important;border-color:transparent!important;border-width:9px!important;border-image:var(--uiB) 30 fill / 10px stretch!important;background:none!important;border-radius:0!important;box-shadow:0 2px 3px rgba(0,0,0,.4)!important}
- html.skin #dCh .btn:active{border-image-source:var(--uiBP)!important}
  /* écran-titre : boutons de laiton (planche), « Continuer » en plaque de laiton qui brille, logo qui s'installe, engrenage qui avance cran par cran */
- html.skin #pTitle .btn{border-style:solid!important;border-color:transparent!important;border-width:11px 13px!important;border-image:var(--uiB) 30 fill / 11px 13px stretch!important;background:none!important;border-radius:0!important;box-shadow:0 3px 6px rgba(0,0,0,.45)!important;color:#f2ecdc!important;text-shadow:0 1px 0 #000;position:relative;overflow:hidden}
- html.skin #pTitle .btn small{color:#cdbd8e!important}
- html.skin #pTitle .btn:active{border-image-source:var(--uiBP)!important;translate:0 1px}
- html.skin #pTitle .btn.pri{border-image:var(--uiP) 0 26 fill / 0 18px stretch!important;border-width:0 18px!important;padding-block:15px!important;color:#2a1806!important;text-shadow:0 1px 0 rgba(255,236,190,.6)!important}
- html.skin #pTitle .btn.pri small{color:#4a3010!important}
- html.skin #pTitle .btn.pri::after{content:'';position:absolute;top:-30%;bottom:-30%;left:-45%;width:28%;background:linear-gradient(100deg,transparent,rgba(255,250,220,.6),transparent);pointer-events:none;animation:tShine 4.8s ease-in-out infinite}
+ /* boutons : le cadre des fenêtres (double filet de laiton, coins ornés) et le fond en papier washi. Le bouton principal est réchauffé (lueur de laiton, texte doré). */
+ html.skin #pTitle .btn,html.skin #mTabs button,html.skin #mGrp button,html.skin #mClose,html.skin #kStart,html.skin #dCh .btn{border-style:solid!important;border-color:transparent!important;border-radius:0!important;
+  background:linear-gradient(rgba(150,170,255,.07),rgba(0,0,10,.26)),var(--uiX) 0 0/300px auto repeat,#161d38!important;background-clip:padding-box!important;color:#efe9d8!important;text-shadow:0 1px 0 #000!important;position:relative}
+ html.skin #pTitle .btn,html.skin #dCh .btn{border-width:5px!important;border-image:var(--uiF) 66 / 16px / 3px stretch!important;box-shadow:inset 0 0 12px rgba(0,0,8,.6),0 3px 6px rgba(0,0,0,.45)!important;overflow:visible}
+ html.skin #mTabs button,html.skin #mGrp button,html.skin #mClose,html.skin #kStart{border-width:4px!important;border-image:var(--uiF) 66 / 11px / 2px stretch!important;box-shadow:inset 0 0 8px rgba(0,0,8,.55),0 2px 4px rgba(0,0,0,.4)!important}
+ html.skin #pTitle .btn small,html.skin #mTabs button small{color:#cbbf98!important;opacity:1!important}
+ html.skin #pTitle .btn.pri,html.skin #mTabs button.on,html.skin #mGrp button.on{background:radial-gradient(120% 140% at 50% 0%,rgba(255,200,110,.30),rgba(255,170,60,.06) 60%,rgba(0,0,0,.18)),var(--uiX) 0 0/300px auto repeat,#1c2240!important;background-clip:padding-box!important;color:#ffd77e!important;
+  text-shadow:0 0 6px rgba(255,190,90,.55),0 1px 0 #000!important;box-shadow:inset 0 0 0 1px rgba(255,214,140,.35),inset 0 0 14px rgba(255,170,60,.25),0 0 10px rgba(255,190,90,.35),0 3px 6px rgba(0,0,0,.45)!important}
+ html.skin #pTitle .btn.pri small,html.skin #mTabs button.on small{color:#f0c879!important}
+ html.skin #mTabs button.on::after{background:#ffd77e!important;box-shadow:0 0 8px #ffb347!important}
+ html.skin #pTitle .btn:active,html.skin #mTabs button:active,html.skin #mGrp button:active,html.skin #mClose:active,html.skin #kStart:active,html.skin #dCh .btn:active{filter:brightness(1.25);translate:0 1px}
+ html.skin #pTitle .btn.pri{overflow:hidden}
+ html.skin #pTitle .btn.pri::after{content:'';position:absolute;top:-30%;bottom:-30%;left:-45%;width:26%;background:linear-gradient(100deg,transparent,rgba(255,236,190,.28),transparent);pointer-events:none;animation:tShine 4.8s ease-in-out infinite}
  html.skin #pTitle p{color:#b9b39e!important;text-shadow:0 1px 2px #000}
- /* menu du jeu : panneau washi, onglets en boutons de laiton (l'onglet ouvert en plaque), page encadrée */
+ /* menu du jeu : panneau washi, page encadrée */
  html.skin #pMenu{background:linear-gradient(rgba(10,14,30,.1),rgba(0,0,8,.42)),var(--uiX) 0 0/430px auto repeat,#161d38!important;border-style:solid!important;border-color:transparent!important;border-width:calc(4*var(--u)) 0 0 0!important;border-image:var(--uiF) 36 0 0 0 / calc(4*var(--u)) 0 0 0 stretch!important}
- html.skin #mBody{border-style:solid!important;border-color:transparent!important;border-width:12px!important;border-image:var(--uiF) 66 / 24px / 3px stretch!important;border-radius:0!important;background:linear-gradient(rgba(150,170,255,.04),rgba(0,0,10,.2)),var(--uiX) 0 0/430px auto repeat,#161d38!important;background-clip:padding-box!important;box-shadow:inset 0 0 18px rgba(0,0,8,.55)!important;margin-top:2px!important}
- html.skin #mTabs button,html.skin #mGrp button{border-style:solid!important;border-color:transparent!important;border-width:7px!important;border-image:var(--uiB) 30 fill / 7px stretch!important;background:none!important;border-radius:0!important;color:#dcd6c4!important;box-shadow:0 2px 3px rgba(0,0,0,.4)!important}
- html.skin #mTabs button.on,html.skin #mGrp button.on{border-image:var(--uiP) 0 26 fill / 0 12px stretch!important;border-width:0 12px!important;padding-block:9px!important;color:#2a1806!important;text-shadow:0 1px 0 rgba(255,236,190,.55)}
- html.skin #mTabs button small{color:#c4b88f!important;opacity:1!important}
- html.skin #mTabs button.on small{color:#4a3010!important}
- html.skin #mClose,html.skin #kStart{border-style:solid!important;border-color:transparent!important;border-width:8px 10px!important;border-image:var(--uiB) 30 fill / 8px 10px stretch!important;background:none!important;border-radius:0!important;color:#f2ecdc!important;box-shadow:0 2px 4px rgba(0,0,0,.45)!important}
- html.skin #mClose:active,html.skin #kStart:active,html.skin #mTabs button:active,html.skin #mGrp button:not(.on):active{border-image-source:var(--uiBP)!important}
- /* bandeau de Kaito sur la carte : cadre de laiton, fond sombre translucide gardé */
+ html.skin #mBody{border-style:solid!important;border-color:transparent!important;border-width:12px!important;border-image:var(--uiF) 66 / 24px / 3px stretch!important;border-radius:0!important;background:linear-gradient(rgba(150,170,255,.04),rgba(0,0,10,.2)),var(--uiX) 0 0/430px auto repeat,#161d38!important;background-clip:padding-box!important;box-shadow:inset 0 0 18px rgba(0,0,8,.55)!important;margin-top:4px!important}
  html.skin #pPad .hud{border-style:solid!important;border-color:transparent!important;border-width:7px!important;border-image:var(--uiF) 66 / 17px / 2px stretch!important;border-radius:0!important;background-clip:padding-box!important}
  @media (prefers-reduced-motion:no-preference){
   html.skin #tit.tIn .ring{animation:tLogo 1.1s cubic-bezier(.2,.8,.3,1.2) both}
@@ -12382,38 +12380,48 @@ window.UIS=(()=>{
  const hs=(a,b)=>{let h=(a*374761393+b*668265263)>>>0;h=(h^(h>>>13))*1274126177>>>0;return(h^(h>>>16))>>>0};
  const SCR={},scr=(k,w,h)=>{let c=SCR[k];if(!c||c.width!==w||c.height!==h){c=SCR[k]=document.createElement('canvas');c.width=w;c.height=h;c.g=c.getContext('2d')}return c};
  const nz=(gx,gy,z)=>.24*Math.sin(gx*.11+gy*.045+z*1.7)+.15*Math.sin(gy*.15-gx*.065+1.3+z)+.08*Math.sin((gx-gy)*.29+z*.5)+((hs(gx,gy)&7)-3.5)*.014;
+ /* champ lissé : chaque pixel regarde les 5×5 cases voisines, pondérées par une gaussienne (σ = 0,75 case) → des courbes douces, pas de marches */
+ const GW=(()=>{const T=16,o=new Float32Array(T*T*25);for(let py=0;py<T;py++)for(let px=0;px<T;px++){let k=0;for(let b=-2;b<=2;b++)for(let a=-2;a<=2;a++){const dx=a+.5-(px+.5)/T,dy=b+.5-(py+.5)/T;o[(py*T+px)*25+k++]=Math.exp(-(dx*dx+dy*dy)/(2*.75*.75))}}return o})();
+ const ORD={g:0,p:1,r:2,f:3};
+ const wob=(gx,gy,z)=>.16*Math.sin(gx*.085+gy*.035+z*1.7)+.1*Math.sin(gy*.12-gx*.05+1.3+z)+.05*Math.sin((gx+gy)*.21+z*.5);
  window.wEdge=(X,ya,yb,at,zoneAt,T)=>{if(window.__noEdge)return;const m=M(),vy0=ya===0?0:ya+4,vy1=yb>=m.h?m.h:yb-4,y0=Math.max(1,ya+1,vy0),y1=Math.min(m.h-1,yb-1,vy1);
-  const tf=X.getTransform(),sc=tf.a,src=(x,y)=>[tf.a*x*T+tf.e,tf.d*y*T+tf.f,tf.a*T,tf.d*T];
+  const tf=X.getTransform(),sc=tf.a,S_=Math.round(T*sc);
   const wet=(x,y)=>{for(let b=-2;b<=2;b++)for(let a=-2;a<=2;a++){const k=at(x+a,y+b);if(k==='~'||k==='P')return true}return false};
-  const L=[],need=new Map();
-  for(let y=y0;y<y1;y++){const z=zoneAt(y);if(!ZB.has(z))continue;for(let x=1;x<m.w-1;x++){const me=cl(at(x,y));if(!me)continue;let ot=null,oq=null;
-    for(const[a,b]of[[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[1,-1],[-1,1],[1,1]]){if(zoneAt(y+b)!==z)continue;const o=cl(at(x+a,y+b));if(o&&o!==me&&OK[me+'|'+o]&&(z!==20||me==='f'||o==='f')&&!(z===20&&(me==='p'||o==='p'))){ot=o;oq=[x+a,y+b];break}}
-    if(!ot||wet(x,y))continue;
-    /* source de la matière voisine : une case bien à l'intérieur (sans liseré), sinon la voisine */
-    let sq=null;for(let r=1;r<=3&&!sq;r++)for(let b=-r;b<=r&&!sq;b++)for(let a=-r;a<=r;a++){const qx=x+a,qy=y+b;if(qy<ya||qy>=yb||zoneAt(qy)!==z||cl(at(qx,qy))!==ot)continue;
-     let ok=1;for(const[e,f]of[[0,-1],[0,1],[-1,0],[1,0]])if(cl(at(qx+e,qy+f))!==ot)ok=0;if(ok){sq=[qx,qy];break}}
-    if(!sq){if(oq[1]<ya||oq[1]>=yb)continue;sq=oq}
-    need.set(sq[0]+','+sq[1],sq);L.push([x,y,me,ot,sq,z])}}
+  const L=[];
+  for(let y=y0;y<y1;y++){const z=zoneAt(y);if(!ZB.has(z))continue;for(let x=2;x<m.w-2;x++){const me=cl(at(x,y));if(!me)continue;let ot=null,oc=null,oq=null;
+    for(const[a,b]of[[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[1,-1],[-1,1],[1,1]]){if(zoneAt(y+b)!==z)continue;const c=at(x+a,y+b),o=cl(c);if(o&&o!==me&&OK[me+'|'+o]&&(z!==20||me==='f'||o==='f')&&!(z===20&&(me==='p'||o==='p'))&&y+b>=ya&&y+b<yb){ot=o;oc=c;oq=[x+a,y+b];break}}
+    if(!ot||wet(x,y))continue;L.push([x,y,me,ot,oc,z,oq])}}
   if(!L.length)return;
-  /* atlas des sources, pris avant toute retouche */
-  const NS=[...need.values()],S_=Math.round(T*sc),cols=Math.ceil(Math.sqrt(NS.length)),A=scr('ea',cols*S_,Math.ceil(NS.length/cols)*S_),ag=A.g,pos=new Map();
-  ag.setTransform(1,0,0,1,0,0);ag.clearRect(0,0,A.width,A.height);ag.imageSmoothingEnabled=false;
-  NS.forEach((q,i)=>{const ax=(i%cols)*S_,ay=((i/cols)|0)*S_;ag.drawImage(X.canvas,...src(q[0],q[1]),ax,ay,S_,S_);pos.set(q[0]+','+q[1],[ax,ay,S_,S_])});
-  const id=new ImageData(T,T),sh=new ImageData(T,T),mk=scr('em',T,T),sk=scr('es',T,T),tmp=scr('et',S_,S_),tg=tmp.g;
-  for(const[x,y,me,ot,sq,z]of L){
-   const fp=(qx,qy)=>{let s=0,n=0;for(let b=-1;b<=1;b++)for(let a=-1;a<=1;a++){const k=cl(at(qx+a,qy+b)),w=(a?1:2)*(b?1:2);if(k!==me&&k!==ot)continue;n+=w;if(k===ot)s+=w}return n?s/n:(cl(at(qx,qy))===ot?1:0)};
-   const F=[];for(let b=-1;b<=1;b++){F.push([]);for(let a=-1;a<=1;a++)F[b+1].push(fp(x+a,y+b))}
-   id.data.fill(0);sh.data.fill(0);let n=0,ns=0;const shade=(me==='g'&&ot==='f');
-   for(let py=0;py<T;py++)for(let px=0;px<T;px++){const u=(px+.5)/T-.5,v=(py+.5)/T-.5,ax=u<0?0:1,ay=v<0?0:1,tx=u<0?u+1:u,ty=v<0?v+1:v;
-    const f=(F[ay][ax]*(1-tx)+F[ay][ax+1]*tx)*(1-ty)+(F[ay+1][ax]*(1-tx)+F[ay+1][ax+1]*tx)*ty,th=.5+nz(x*T+px,y*T+py,z),k=(py*T+px)*4;
-    if(f>th){id.data[k+3]=255;n++}else if(shade&&f>th-.16){sh.data[k]=8;sh.data[k+1]=14;sh.data[k+2]=6;sh.data[k+3]=f>th-.08?92:52;ns++}}
+  /* secours : la case voisine elle-même, prise avant toute retouche */
+  const NQ=new Map();for(const q of L)NQ.set(q[6][0]+','+q[6][1],q[6]);const NS=[...NQ.values()],cols=Math.ceil(Math.sqrt(NS.length)),A=scr('ea',cols*S_,Math.ceil(NS.length/cols)*S_),ag=A.g,pos=new Map();
+  ag.setTransform(1,0,0,1,0,0);ag.clearRect(0,0,A.width,A.height);ag.imageSmoothingEnabled=false;NS.forEach((q,i)=>{const ax=(i%cols)*S_,ay=((i/cols)|0)*S_;ag.drawImage(X.canvas,tf.a*q[0]*T+tf.e,tf.d*q[1]*T+tf.f,S_,S_,ax,ay,S_,S_);pos.set(q[0]+','+q[1],[ax,ay,S_,S_])});
+  /* la matière voisine, rendue telle qu'elle serait dans CETTE case (texture alignée, pas un morceau pris ailleurs) */
+  const tc=scr('etx',S_,S_),tx=tc.g;
+  const texAt=(z,ch,x,y,oq)=>{tx.setTransform(1,0,0,1,0,0);tx.globalCompositeOperation='source-over';tx.clearRect(0,0,S_,S_);tx.setTransform(sc,0,0,sc,-x*T*sc,-y*T*sc);tx.imageSmoothingEnabled=false;
+   const h=hs(x*3+7,y*5+2)%100;let ok=false;try{if(window.ZT&&ZT[z])ok=!!ZT[z](tx,ch,x,y,h)}catch(e){ok=false}
+   if(!ok){try{const D=window.HDC&&HDC[z],k=D&&(D.t(ch,h,x,y)||(cl(ch)==='g'?D.base(h):null)),im=k&&XI[k];if(im&&im.width){if(im.width===192)tx.drawImage(im,(x%4)*48,(y%4)*48,48,48,x*T,y*T,T,T);else tx.drawImage(im,x*T,y*T,T,T);ok=true}}catch(e){ok=false}}
+   tx.setTransform(1,0,0,1,0,0);if(!ok){const P_=pos.get(oq[0]+','+oq[1]);if(P_){tx.drawImage(A,...P_,0,0,S_,S_);ok=true}}return ok};
+  const id=new ImageData(T,T),sh=new ImageData(T,T),mk=scr('em',T,T),sk=scr('es',T,T),V=new Float32Array(25);
+  for(const[x,y,me,ot,oc,z,oq]of L){
+   let k=0;for(let b=-2;b<=2;b++)for(let a=-2;a<=2;a++){const q=zoneAt(y+b)===z?cl(at(x+a,y+b)):null;V[k++]=q===ot?1:q===me?0:-1}
+   const up=ORD[ot]>ORD[me];id.data.fill(0);sh.data.fill(0);let n=0,ns=0;const shade=me==='g'&&ot==='f';
+   for(let py=0;py<T;py++)for(let px=0;px<T;px++){const o=(py*T+px)*25;let s1=0,s0=0;for(let q=0;q<25;q++){const v=V[q];if(v<0)continue;const w_=GW[o+q];s0+=w_;s1+=w_*v}
+    const f=s0?s1/s0:0,w=wob(x*T+px,y*T+py,z),th=up?.5+w:.5-w,kk=(py*T+px)*4;
+    if(f>th){id.data[kk+3]=255;n++}else if(shade&&f>th-.17){sh.data[kk]=6;sh.data[kk+1]=12;sh.data[kk+2]=5;sh.data[kk+3]=f>th-.08?88:46;ns++}}
    if(!n&&!ns)continue;X.save();X.imageSmoothingEnabled=false;
-   if(n){mk.g.putImageData(id,0,0);tg.globalCompositeOperation='source-over';tg.clearRect(0,0,S_,S_);tg.imageSmoothingEnabled=false;tg.drawImage(A,...pos.get(sq[0]+','+sq[1]),0,0,S_,S_);
-    tg.globalCompositeOperation='destination-in';tg.drawImage(mk,0,0,S_,S_);X.drawImage(tmp,x*T,y*T,T,T)}
+   if(n&&texAt(z,oc,x,y,oq)){mk.g.putImageData(id,0,0);tx.globalCompositeOperation='destination-in';tx.drawImage(mk,0,0,S_,S_);tx.globalCompositeOperation='source-over';X.drawImage(tc,x*T,y*T,T,T)}
    if(ns){sk.g.putImageData(sh,0,0);X.drawImage(sk,x*T,y*T,T,T)}X.restore()}};
  /* lisières : touffes d'herbes hautes et buissons de la zone, posés contre la limite */
  const BUSH={20:['X_B20_ROCKS','X_B20_ROCKS','X_B20_CRYST','X_B20_MUSH'],0:['X_TR0','X_TR1','X_TR2'],1:['X_TR0','X_TR1','X_TR2'],6:['X_SBUSH'],7:['X_ABUSH'],8:['X_RBUSH'],10:['X_GBUSH']};
+ let OCC19=null;const occ19=()=>{if(OCC19)return OCC19;const R=window.ROCKS19&&ROCKS19();if(!R||!R.length)return null;OCC19=new Set();for(const b of R)for(let i=0;i<b.w;i++)for(let j=0;j<b.h;j++)OCC19.add((b.x+i)+','+(b.y+j));return OCC19};
  window.wEdgeDeco=(add,ya,yb,at,zoneAt,hash,okI)=>{if(window.__noEdge)return;const m=M();const HG={};
+  /* mont des Tengu : le sous-bois se remplit de pins et d'érables serrés, et ceux de la lisière débordent sur l'herbe */
+  if(okI('X_B19_PINE')&&okI('X_B19_MAPLE')){const O=occ19();
+   for(let y=Math.max(1,ya);y<Math.min(m.h-1,yb);y++){if(zoneAt(y)!==19)continue;for(let x=1;x<m.w-1;x++){if(at(x,y)!=='T'||(O&&O.has(x+','+y)))continue;
+    const nb=[[-1,0],[1,0],[0,-1],[0,1]].map(([a,b])=>at(x+a,y+b)),open=k=>k&&k!=='T'&&k!=='~'&&k!==' ',ed=nb.some(open),h=hash(x*13+3,y*29+7)%100;
+    if(!ed&&(x+y)%2&&h<55)continue;
+    let dx=(h%9)-4,dy=(hash(y,x*5)%5)-3;if(ed){if(open(nb[0]))dx-=5;if(open(nb[1]))dx+=5;if(open(nb[3]))dy+=4;if(open(nb[2]))dy-=2}
+    add(x,y,XI[h<52?'X_B19_PINE':'X_B19_MAPLE'],dx,dy-1,1,1)}}}
   const tufts=z=>{if(HG[z])return HG[z];const l=[];for(let i=0;i<8;i++)if(okI('X_HG'+z+'_'+i))l.push('X_HG'+z+'_'+i);return HG[z]=l};
   /* pied des bâtiments et des esplanades : la rangée juste dessous */
   const BASE=new Set();for(const b of m.bld||[]){const yy=b.y+b.h;if(yy<ya||yy>=yb||!ZB.has(zoneAt(yy)))continue;for(let x=b.x;x<b.x+b.w;x++)BASE.add(x+','+yy)}
@@ -12562,27 +12570,40 @@ window.WAN=(()=>{
   const Lmin=Math.max(24,H*.15),R=[];let x0=W,x1=-1,y0=H,y1=-1;
   for(let x=0;x<W;x++){let y=0;while(y<H){if(!isW(y*W+x)){y++;continue}let e=y;while(e<H&&isW(e*W+x))e++;if(e-y>=Lmin){R.push([x,y,e-y]);if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(e>y1)y1=e}y=e}}
   if(R.length<3)return null;const w=x1-x0+1,h=y1-y0,cv=document.createElement('canvas');cv.width=w;cv.height=h;const cg=cv.getContext('2d'),id=cg.createImageData(w,h);
-  const runs=R.map(([x,y,L])=>{const col=new Float32Array(L*3),base=new Float32Array(L*3),det=new Float32Array(L*3);for(let j=0;j<L;j++){const i=((y+j)*W+x)*4;col[j*3]=d[i];col[j*3+1]=d[i+1];col[j*3+2]=d[i+2]}
-   for(let j=0;j<L;j++)for(let ch=0;ch<3;ch++){let s=0,n=0;for(let q=Math.max(0,j-5);q<=Math.min(L-1,j+5);q++){s+=col[q*3+ch];n++}base[j*3+ch]=s/n;det[j*3+ch]=col[j*3+ch]-s/n}
-   return{x:x-x0,y:y-y0,L,base,det}});
-  return{W,H,x0,y0,w,h,runs,cv,cg,id,last:-1}};
+  let hi=[0,0,0,0];for(const[x,y,L]of R)for(let k=0;k<L;k++){const q=((y+k)*W+x)*4,l=d[q]+d[q+1]+d[q+2];if(l>hi[3])hi=[d[q],d[q+1],d[q+2],l]}
+  const runs=R.map(([x,y,L])=>{const col=new Uint8ClampedArray(L*3);for(let j=0;j<L;j++){const i=((y+j)*W+x)*4;col[j*3]=d[i];col[j*3+1]=d[i+1];col[j*3+2]=d[i+2]}
+   const h=((x*7919+y*104729)>>>0)%1000/1000;return{x:x-x0,y:y-y0,L,col,h}});
+  return{W,H,x0,y0,w,h,runs,cv,cg,id,last:-1,hi}};
  const wfOf=(k,im)=>{if(!WFM.has(k))WFM.set(k,/^X_I\d/.test(k)?anaWF(im):null);return WFM.get(k)};
- const wfStep=(F,t)=>{const s=Math.floor(t*62);if(s===F.last)return;F.last=s;const D=F.id.data,w=F.w;
-  for(const r of F.runs){const L=r.L,sh=s%L;for(let j=0;j<L;j++){const q=((j-sh)%L+L)%L,i=((r.y+j)*w+r.x)*4;
-   D[i]=r.base[j*3]+r.det[q*3];D[i+1]=r.base[j*3+1]+r.det[q*3+1];D[i+2]=r.base[j*3+2]+r.det[q*3+2];D[i+3]=255}}F.cg.putImageData(F.id,0,0)};
+ /* l'eau défile vers le bas (toute la couleur de chaque colonne, raccord fondu), des filets clairs descendent plus vite, l'écume scintille en bas */
+ const wfStep=(F,t)=>{const s=Math.floor(t*30);if(s===F.last)return;F.last=s;const D=F.id.data,w=F.w,sp=t*105,H_=F.hi,K=6;
+  for(const r of F.runs){const L=r.L,c=r.col,sh=Math.floor(sp*(.85+.3*r.h))%L;
+   for(let j=0;j<L;j++){let q=((j-sh)%L+L)%L,R_=c[q*3],G_=c[q*3+1],B_=c[q*3+2];if(q<K){const a=q/K,p_=L-K+q;R_=R_*a+c[p_*3]*(1-a);G_=G_*a+c[p_*3+1]*(1-a);B_=B_*a+c[p_*3+2]*(1-a)}
+    const lp=Math.max(3,L*.09);if(j<lp){const a=j/lp;R_=c[j*3]*(1-a)+R_*a;G_=c[j*3+1]*(1-a)+G_*a;B_=c[j*3+2]*(1-a)+B_*a}
+    const i=((r.y+j)*w+r.x)*4;D[i]=R_;D[i+1]=G_;D[i+2]=B_;D[i+3]=255}
+   /* filets d'écume qui tombent */
+   if(r.h<.62){const len=5+((r.h*97)|0)%9,per=L+len,y_=((sp*1.45+r.h*per*3)%per)-len;for(let k=0;k<len;k++){const j=Math.round(y_+k);if(j<0||j>=L)continue;const a=.6*(1-Math.abs(k-len*.35)/len),i=((r.y+j)*w+r.x)*4;D[i]+=(H_[0]-D[i])*a;D[i+1]+=(H_[1]-D[i+1])*a;D[i+2]+=(H_[2]-D[i+2])*a}}
+   /* écume du bas */
+   for(let j=Math.max(0,L-7);j<L;j++){const hh=((s*31+r.x*17+j*13)*2654435761>>>0)%100;if(hh<30){const i=((r.y+j)*w+r.x)*4;D[i]=D[i]+(240-D[i])*.75;D[i+1]=D[i+1]+(250-D[i+1])*.75;D[i+2]=255}}}
+  F.cg.putImageData(F.id,0,0)};
  /* fumées des bâtiments : le panache existant ondule par fines bandes, et des bouffées prises dans son sommet montent, grossissent et s'effacent */
  const SMK={X_V_ZT5:[[72,8,160,136]],X_V_MINE20:[[75,58,96,86],[440,40,466,88],[474,40,526,124]]},SMC=new Map();
  const anaSM=(k,im)=>{if(SMC.has(k))return SMC.get(k);let out=null;const R=SMK[k];if(R&&im&&im.width){try{const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const g=c.getContext('2d');g.drawImage(im,0,0);out=[];
-   for(const[x0,y0,x1,y1]of R){const w=x1-x0,h=y1-y0,dd=g.getImageData(x0,y0,w,h),D=dd.data;let n=0,top=h;
-    for(let i=0;i<w*h;i++){const r=D[i*4],gg=D[i*4+1],b=D[i*4+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),L=(r+gg+b)/3;if(D[i*4+3]>20&&mx-mn<32&&L>=100){n++;top=Math.min(top,(i/w)|0)}else D[i*4+3]=0}
+   for(const[x0,y0,x1,y1]of R){const w=x1-x0,h=y1-y0,dd=g.getImageData(x0,y0,w,h),D=dd.data;let n=0,top=h,bot=0,sx=0;
+    for(let i=0;i<w*h;i++){const r=D[i*4],gg=D[i*4+1],b=D[i*4+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),L=(r+gg+b)/3;if(D[i*4+3]>20&&mx-mn<32&&L>=100){n++;const yy=(i/w)|0;top=Math.min(top,yy);bot=Math.max(bot,yy);sx+=i%w}else D[i*4+3]=0}
     if(n<12)continue;const sc=document.createElement('canvas');sc.width=w;sc.height=h;sc.getContext('2d').putImageData(dd,0,0);
-    const ph=Math.max(6,Math.round((h-top)*.38)),pc=document.createElement('canvas');pc.width=w;pc.height=ph;pc.getContext('2d').drawImage(sc,0,top,w,ph,0,0,w,ph);
-    out.push({x0,y0,w,h,top,c:sc,p:pc,ph})}}catch(e){out=null}}if(out&&!out.length)out=null;SMC.set(k,out);return out};
+    /* bouffées : des morceaux ronds du panache, bords fondus */
+    const P=[],r0=Math.max(4,Math.round(Math.min(w,(bot-top))*.32));
+    for(const f of[.25,.5,.72]){const cy=Math.round(top+(bot-top)*f),cx=Math.round(sx/n),pc=document.createElement('canvas');pc.width=pc.height=r0*2;const pg=pc.getContext('2d');pg.drawImage(sc,cx-r0,cy-r0,r0*2,r0*2,0,0,r0*2,r0*2);
+     pg.globalCompositeOperation='destination-in';const gr=pg.createRadialGradient(r0,r0,0,r0,r0,r0);gr.addColorStop(0,'rgba(0,0,0,1)');gr.addColorStop(.55,'rgba(0,0,0,.85)');gr.addColorStop(1,'rgba(0,0,0,0)');pg.fillStyle=gr;pg.fillRect(0,0,r0*2,r0*2);P.push(pc)}
+    out.push({x0,y0,w,h,top,bot,cx:sx/n,c:sc,P,r0})}}catch(e){out=null}}if(out&&!out.length)out=null;SMC.set(k,out);return out};
+ /* le panache ondule par bandes, et des bouffées sortent de sa base, montent au-dessus du toit en grossissant et s'effacent */
  const smoke=(g,S_,im,cx,by,w,hh,fl,t,ph)=>{const s=w/im.width,L=cx-w/2,T_=by-hh;g.save();if(fl){g.translate(cx,0);g.scale(-1,1);g.translate(-cx,0)}
-  for(const q of S_){const X0=L+q.x0*s,Y0=T_+q.y0*s;
-   for(let y=0;y<q.h;y+=3){const dx=Math.sin(t*1.7+y*.11+ph)*1.6*s;g.drawImage(q.c,0,y,q.w,Math.min(3,q.h-y),X0+dx,Y0+y*s,q.w*s,Math.min(3,q.h-y)*s)}
-   for(let i=0;i<3;i++){const p=((t/3.6+i/3+ph*.1)%1+1)%1,a=(p<.18?p/.18:1-(p-.18)/.82)*.8,sc=1+.55*p,rw=q.w*s*sc,rh=q.ph*s*sc,mx=X0+q.w*s/2+Math.sin(t*.8+i*2.1+ph)*3*s,my=Y0+q.top*s-p*q.h*s*.75;
-    g.globalAlpha=a;g.drawImage(q.p,mx-rw/2,my-rh*.55,rw,rh)}g.globalAlpha=1}g.restore()};
+  for(const q of S_){const X0=L+q.x0*s,Y0=T_+q.y0*s,N=7,span=(q.bot-q.top)*s,rise=span+Math.max(18,span*.9),D_=3.4+span*.012;
+   for(let y=q.top;y<=q.bot;y+=2){const dx=Math.sin(t*2.1-y*.16+ph)*1.4*s*(1+(q.bot-y)/(q.bot-q.top+1));g.drawImage(q.c,0,y,q.w,2,X0+dx,Y0+y*s,q.w*s,2*s)}
+   for(let i=0;i<N;i++){const p=((t/D_+i/N+ph*.13)%1+1)%1,pc=q.P[i%q.P.length],sz=q.r0*2*s*(.55+1.25*p),a=(p<.12?p/.12:Math.pow(1-(p-.12)/.88,1.3))*.9,
+     mx=X0+q.cx*s+Math.sin(t*1.3+i*2.4+ph)*(2+6*p)*s+p*5*s,my=Y0+q.bot*s-q.r0*s*.4-p*rise;
+    g.globalAlpha=a;g.drawImage(pc,mx-sz/2,my-sz/2,sz,sz)}g.globalAlpha=1}g.restore()};
  const prep=(o,SPL)=>{const k=key(o.im);if(!k)return;const L=LAN[k];
   {const F=wfOf(k,o.im);if(F){SPL.push({x:o.x,y:o.y,im:F.cv,w:o.w,hh:o.hh,dx:o.dx,dy:o.dy,sy:o.sy+.01,an:{t:'W',F}});return}}
   if(L&&ok(k+'_P')&&ok(k+'_L')){o.im=XI[k+'_P'];SPL.push({x:o.x,y:o.y,im:XI[k+'_L'],w:o.w,hh:o.hh,dx:o.dx,dy:o.dy,sy:o.sy+.01,an:{t:'L',p:L.p,a:L.a,f:L.f,gl:ok(k+'_G')?XI[k+'_G']:null}});return}
@@ -12610,7 +12631,7 @@ window.WAN=(()=>{
   const row=BR[o.y]||(BR[o.y]=[]);ID.set(id,o);if(old){const k=row.indexOf(old);if(k>=0){row[k]=o;return}}row.push(o);NR++;if(inv){const k=key(o.im);inv[k]=(inv[k]||0)+1}};
  const wind=(t,o,c)=>{const x=o.x+o.dx/16,ph=x*.45+o.y*.13,gu=.62+.38*Math.sin(t*.31+x*.05+o.y*.021);return c.a*gu*(Math.sin(t*c.f*2.1-ph)*.75+Math.sin(t*c.f*3.7-ph*1.7+1.3)*.25)};
  const sway=(g,o,bx,by,s,t)=>{const c=o.an;
-  if(c.t==='W'){if(S.fxoff||LV<1)return;const F=c.F;wfStep(F,t);const sx=o.w/F.W,sy=o.hh/F.H;g.drawImage(F.cv,bx-o.w/2+F.x0*sx,by-o.hh+F.y0*sy,F.w*sx,F.h*sy);return}
+  if(c.t==='W'){if(S.fxoff)return;const F=c.F;wfStep(F,t);const sx=o.w/F.W,sy=o.hh/F.H;g.drawImage(F.cv,bx-o.w/2+F.x0*sx,by-o.hh+F.y0*sy,F.w*sx,F.h*sy);return}
   if(c.t==='G'){if(S.fxoff||LV<1)return;g.save();g.globalCompositeOperation='lighter';g.globalAlpha=Math.min(1,fl(t,o,c.k));g.drawImage(o.im,bx-o.w/2,by-o.hh,o.w,o.hh);g.restore();return}
   if(c.t==='L'){const x0=bx-o.w/2,y0=by-o.hh,px=x0+c.p[0]*o.w,py=y0+c.p[1]*o.hh;g.save();if(s){g.translate(px,py);g.rotate(s);g.translate(-px,-py)}g.drawImage(o.im,x0,y0,o.w,o.hh);
    if(c.gl&&!S.fxoff&&LV>0){g.globalCompositeOperation='lighter';g.globalAlpha=Math.min(1,fl(t,o,.85));g.drawImage(c.gl,x0,y0,o.w,o.hh)}g.restore();return}
@@ -12627,6 +12648,10 @@ window.WAN=(()=>{
  const draw=(L,g,X,Y,VW,VH,t,dB,bW,E,spr,isHD,BL,bI)=>{
   if(lastT){const dt=Math.min(.25,t-lastT);ema=ema*.95+dt*.05;if(ema>1/30){bad+=dt;if(bad>4&&LV>0&&window.WANLV==null){LV--;bad=0;ema=1/60}}else bad=Math.max(0,bad-dt*.5)}lastT=t;if(window.WANLV!=null)LV=WANLV;
   if(!S.fxoff&&LV>0)drawRF(L,g,X,Y,VW,VH,t,LV>0,E,spr,isHD,BL,bI);
+  /* cascades des rochers (posés comme des bâtiments) */
+  if(!S.fxoff&&BL&&bI){if(!draw.WB||draw.WBn!==BL.length){draw.WBn=BL.length;draw.WB=BL.filter(b=>/^X_I\d/.test(b.im)&&XI[b.im]&&wfOf(b.im,XI[b.im]))}
+   for(const b of draw.WB){const k=bI(b);if(!k)continue;const[im,cx,by,w,hh,fl]=k;if(cx+w/2-X<0||cx-w/2-X>VW||by-Y<0||by-hh-Y>VH)continue;const F=wfOf(b.im,XI[b.im]);
+    L.push({y:bW(b)*16+1.5,f:()=>{wfStep(F,t);const sx=w/F.W,sy=hh/F.H,x0=cx-X-w/2,y0=by-Y-hh;g.save();if(fl){g.translate(cx-X,0);g.scale(-1,1);g.translate(-(cx-X),0)}g.drawImage(F.cv,x0+F.x0*sx,y0+F.y0*sy,F.w*sx,F.h*sy);g.restore()}})}}
   if(!S.fxoff&&LV>0&&BL&&bI){if(!draw.SB||draw.SBn!==BL.length){draw.SBn=BL.length;draw.SB=BL.filter(b=>SMK[b.im])}
    for(const b of draw.SB){const k=bI(b);if(!k)continue;const[im,cx,by,w,hh,fl]=k;if(cx+w/2-X<0||cx-w/2-X>VW||by-Y<-20||by-hh-Y-60>VH)continue;const S_=anaSM(b.im,XI[b.im]);if(!S_)continue;
     L.push({y:bW(b)*16+2,f:()=>smoke(g,S_,XI[b.im],cx-X,by-Y,w,hh,fl,t,b.x*.37+b.y*.11)})}}
@@ -12634,7 +12659,7 @@ window.WAN=(()=>{
   for(let r=r0;r<=r1;r++){const row=BR[r];if(!row)continue;for(const o of row){const bx=o.x*16+8+o.dx-X,by=o.sy-Y,m=o.w/2+4;if(bx+m<0||bx-m>VW||by<-2||by-o.hh>VH)continue;
    const c=o.an,s=on&&c.t!=='G'&&c.t!=='W'&&(LV>1||!c.g)?wind(t,o,c):0;L.push({y:o.dp,f:()=>sway(g,o,bx,by,s,t)});
    for(const q of o.occ){const cb=o.cb;L.push({y:q.bld?bW(q.bld)*16+1:dep(q),f:()=>{g.save();g.beginPath();g.rect(cb[0]-X,cb[1]-Y,cb[2],cb[3]);g.clip();if(q.bld)dB(g,q.bld,X,Y);else g.drawImage(q.im,q.x*16+8-q.w/2+q.dx-X,q.sy-q.hh-Y,q.w,q.hh);g.restore()}})}}}};
- return{cfg,prep,reg,rf,reset,draw,shear,get N(){return NR},get LV(){return LV},inv:v=>{inv=v||{};return inv},get I(){return inv}}})();
+ return{WFM,cfg,prep,reg,rf,reset,draw,shear,get N(){return NR},get LV(){return LV},inv:v=>{inv=v||{};return inv},get I(){return inv}}})();
 
 /* ===== fiches mémo des kanji : image mnémotechnique, phrase pour retenir la forme, lectures kun et on expliquées ===== */
 window.KMEMO={
