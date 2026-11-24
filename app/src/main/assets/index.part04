@@ -5823,15 +5823,16 @@ const Battle=(()=>{
    if(!B.rage&&!def.wild&&def.id!=='yoma0'&&B.ehp<=def.hp*.35){B.rage=1;BSC.cls('bsFl','go',500);sfx('alert');await msg([jl(['怒った|おこった','！'],`${def.n} enrage ! Ses coups font plus mal.`)],{auto:1400})}
    if(def.trait==='burn'){B.ehp=Math.max(0,B.ehp-5);B.flashE=.4;sfx('hit');await msg(`${def.n} se consume toute seule : −5 PV.`,{auto:900});if(B.ehp<=0){await ko();break}}
    // --- tour de l'ennemi ---
+   if(window.BFX&&BFX.pick){B.av=BFX.pick(def,B);B.an=B.av?B.av.nm:''}
    if(B.stun){B.stun=0;await msg(`${def.n} est figé et ne peut pas attaquer.`,{auto:1000});continue}
-   if(B.dodge){B.dodge=0;if(window.BPZ)BPZ.pose(1);BSC.cls(def.boss?'bsBg':'bsEn','atk',450);await tween(300,p=>{B.lunge=-Math.sin(p*Math.PI)*14});B.lunge=0;if(window.BPZ)BPZ.back();await msg([jl(['よけた','！'],`Tu avais deviné « ${def.atk} » : esquive parfaite !`)],{auto:1200});continue}
+   if(B.dodge){B.dodge=0;if(window.BPZ)BPZ.pose(1);BSC.cls(def.boss?'bsBg':'bsEn','atk',450);await tween(300,p=>{B.lunge=-Math.sin(p*Math.PI)*14});B.lunge=0;if(window.BPZ)BPZ.back();await msg([jl(['よけた','！'],`Tu avais deviné « ${B.an||def.atk} » : esquive parfaite !`)],{auto:1200});continue}
    const stiff=def.trait==='stiff';if(stiff&&B.turn%2===1){await msg(`${def.n} prend son élan… très, très lentement.`,{auto:1100});continue}
    const eq=def.trait==='ear'?Oral.q('mix'):null;
    if(!S.fl.tut_p){S.fl.tut_p=1;await msg('L\'ennemi va attaquer. Une question apparaît : réponds juste avant la fin du temps et tu pares le coup, sans aucun dégât.',{auto:0})}
-   await msg(eq?`${def.n} lance « ${def.atk} » ! Tends l'oreille pour parer !`:`${def.n} prépare « ${def.atk} » ! Réponds vite pour parer !`,{auto:900});
+   await msg(eq?`${def.n} lance « ${B.an||def.atk} » ! Tends l'oreille pour parer !`:`${def.n} prépare « ${B.an||def.atk} » ! Réponds vite pour parer !`,{auto:900});
    const eQ=!eq&&Math.random()<.35?(()=>{const L=Object.values(S.er||{}).filter(o=>o.q&&o.q.q==='mcq'&&o.q.o);return L.length?JSON.parse(JSON.stringify(L[Math.floor(Math.random()*L.length)].q)):null})():null,useG=lessonsDone().length&&Math.random()<.6,q=eq||eQ||(useG&&pickEx(x=>x.q!=='ord'))||(Math.random()<.45&&Vocab.pq())||Ex.kanjiQ();D.hide();
    const ok=await Ex.run(q,{timed:(eq?15000:useG?10000:6500)*(def.trait==='frost'?.75:1)*(B.ume?1.6:1),head:eq?'<b>受け · Parade à l\'oreille</b> · ':eQ?'<b>誤 · Une ancienne erreur revient !</b> · ':'<b>受け · Parade</b> · '});if(eq){const s=Oral.st();s.l++;if(ok)s.lo++}UI.panel('bat');$('#bCmd').classList.add('hidden');$('#bList').classList.add('hidden');$('#bBack').classList.add('hidden');
-   if(window.BPZ)BPZ.pose(1);BSC.cls(def.boss?'bsBg':'bsEn','atk',450);await tween(300,p=>{B.lunge=-Math.sin(p*Math.PI)*14});B.lunge=0;if(window.BFX&&BFX.enemy)await BFX.enemy(def,ok);if(window.BPZ)BPZ.back();
+   if(window.BPZ)BPZ.pose(1);BSC.cls(def.boss?'bsBg':'bsEn','atk',450);await tween(300,p=>{B.lunge=-Math.sin(p*Math.PI)*14});B.lunge=0;if(window.BFX&&BFX.enemy)await BFX.enemy(def,ok,B.av);if(window.BPZ)BPZ.back();
    if(ok){sfx('ok');await msg([jl(['うけた','！'],'Parade réussie ! Aucun dégât.')],{auto:900})}
    else if(B.bento){B.bento=0;sfx('ok');await msg('Le coup glisse : tu avais bien mangé. Aucun dégât.',{auto:1100})}
    else{const d=Math.round((def.dmg+rnd(5))*(stiff?1.8:1)*(B.rage?1.35:1));await hitM(d);await msg(`Touché ! Tu perds ${B.ld} PV.`,{auto:800})}
@@ -12066,7 +12067,13 @@ window.BFX=(()=>{
   eFLAM:['EFLAM','c',.85,[110,150,300,240],1,'m',1],eGIVR:['EGIVR','c',.95,[120,170,320,260],1,'m'],eVAG:['EVAG','b',1.0,[120,170,330,260],0,'m',1],
   eENCR:['EENCR','c',.95,[120,160,300,240],1,'m',1],eFOUD:['EFOUD','c',1.1,[110,140,320,240],0,'m'],eVENT:['EVENT','c',1.0,[130,170,320,240],1,'m'],
   eSON:['ESON','c',.9,[110,150,300,240],1,'m',1],ePAP:['EPAP','c',1.0,[120,170,320,260],1,'m'],eOR:['EOR','b',1.05,[120,160,320,260],0,'m'],
-  eBOUE:['EBOUE','c',.9,[110,160,300,240],1,'m'],eGRIF:['EGRIF','c',.8,[90,120,260,200],0,'m',1],eCHOC:['ECHOC','b',.85,[110,150,300,240],0,'m']};
+  eBOUE:['EBOUE','c',.9,[110,160,300,240],1,'m'],eGRIF:['EGRIF','c',.8,[90,120,260,200],0,'m',1],eCHOC:['ECHOC','b',.85,[110,150,300,240],0,'m'],
+  // attaques génériques (planches B13-B27) : actives dès que leurs images sont là
+  eONIB:['EONIB','c',.85,[110,150,300,240],1,'m'],eBRAI:['EBRAI','c',.9,[110,150,300,240],1,'m'],eVAPE:['EVAPE','c',.95,[110,160,300,240],1,'m'],
+  eJETO:['EJETO','b',1.05,[120,170,320,260],0,'m'],eBULL:['EBULL','c',.85,[110,160,300,240],1,'m'],eRONC:['ERONC','b',.95,[120,170,320,260],0,'m'],
+  eFEUI:['EFEUI','c',.95,[110,150,300,240],1,'m'],eROCH:['EROCH','b',1.0,[110,160,320,260],0,'m'],ePICS:['EPICS','b',.95,[110,150,320,260],0,'m'],
+  eECLA:['EECLA','b',1.2,[110,140,320,240],0,'m'],eLAME:['ELAME','c',.85,[100,130,280,220],1,'m'],eMORS:['EMORS','c',.75,[110,130,300,220],0,'m'],
+  ePOIN:['EPOIN','c',.75,[90,120,280,200],0,'m'],eROUA:['EROUA','c',.95,[110,150,300,240],1,'m'],eSUIE:['ESUIE','c',1.0,[120,170,320,260],1,'m']};
  const BIG={'火':1,'水':1,'土':1,'山':1,'雷':1,eFLAM:1,eVAG:1,eFOUD:1,eCHOC:1,eOR:1};
  const MH={farm:1.017,trav:1.013,appr:1.06,r4:1.033,r5:1.093,r6:1.033,r7:1.113}; // hauteur de l'image / hauteur du corps au repos
  {const st=document.createElement('style');st.textContent='#bscene .bfx{position:absolute;pointer-events:none;z-index:3;image-rendering:pixelated;transition:left .26s ease-in,top .26s ease-in,opacity .18s}#bscene.bfxS{animation:jzShake .3s}';document.head.appendChild(st)}
@@ -12090,11 +12097,42 @@ window.BFX=(()=>{
   me.style.height=Math.round(h)+'px';me.style.left=Math.round(l0+h0*asp/2-w/2)+'px'}
  function setup(me){const u=hero(0);if(!me)return;if(u){me.dataset.btp=1;me.onload=()=>fit(me);me.src=u;if(me.complete)fit(me)}else{delete me.dataset.btp;me.style.height='';me.style.left=''}}
  function pose(p){const me=document.getElementById('bsMe'),u=hero(p);if(me&&u&&me.dataset.btp&&me.src!==u)me.src=u}
+ // ---- répertoire d'attaques : chaque ennemi a 4 ou 5 attaques (sa signature, son élément, sa famille) ; il en tire une à chaque tour ----
+ const NM={FLAM:'Souffle de flammes',GIVR:'Souffle glacé',VAG:'Raz-de-marée',ENCR:"Jet d'encre",FOUD:'Foudre rouge',VENT:'Bourrasque',SON:'Onde sonore',PAP:'Tempête de feuillets',
+  OR:'Pluie de pièces',BOUE:'Giclée de boue',GRIF:'Coup de griffes',CHOC:'Charge',ONIB:'Feu follet',BRAI:'Gerbe de braises',VAPE:'Jet de vapeur',JETO:'Geyser',BULL:'Bulles',
+  RONC:'Ronces',FEUI:'Feuilles tranchantes',ROCH:'Éboulement',PICS:'Pics de pierre',ECLA:'Éclair',LAME:'Lames de vent',MORS:'Morsure',POIN:'Coup puissant',ROUA:'Pluie de rouages',SUIE:'Nuage de suie'};
+ // boss : choisis à la main pour coller à ce qu'ils sont (la première est leur attaque signature, celle qui porte leur nom d'attaque)
+ const BOSSP={doro2:'BOUE CHOC ROCH ONIB PICS',chochin2:'FLAM ONIB BRAI VAPE CHOC',karakuri2:'CHOC ROUA VAPE ONIB',kamado2:'FLAM BRAI VAPE SUIE CHOC',boss:'CHOC GRIF VAPE BRAI FLAM',
+  yuki:'GIVR VENT ONIB LAME',nuri2:'CHOC POIN ROCH PICS',umi2:'VAG JETO BULL VAPE CHOC',wanyudo3:'FLAM ONIB CHOC PAP BRAI',kyorin2:'ENCR PAP ONIB SON VENT',
+  baku:'PAP VENT CHOC VAPE SUIE',baku2:'PAP FLAM BRAI CHOC SUIE',nue:'SON ECLA GRIF MORS VENT',yamabiko:'SON POIN CHOC ROCH RONC',ungai:'GRIF ROUA ONIB LAME SON',
+  kaze:'VENT LAME FEUI POIN VAPE',tetsu:'ENCR LAME ROUA SUIE',tetsu2:'ENCR SUIE VENT LAME FOUD',ushioni:'GRIF VAG CHOC BULL VAPE',kinko:'OR PAP ROUA CHOC VAPE',
+  daitengu:'VENT LAME FEUI ECLA CHOC',mukade:'GRIF MORS ROCH ROUA PICS',tetsuf:'FOUD ENCR LAME ROUA FLAM'};
+ // yōkai : une signature quand elle va de soi, puis deux attaques de leur élément et deux de leur famille (bête, objet, esprit)
+ const YSIG={suzuri:'ENCR',ashig:'ENCR',mushi:'ENCR',kamikiri:'PAP',noppera:'PAP',ittan:'PAP',byobu:'PAP',zeni:'OR',kanedama:'OR',soroban:'OR',jinda:'SON',karasu:'SON',
+  tengu:'VENT',karasu4:'VENT',uneri:'VENT',kamai:'GRIF',nekomata:'GRIF',heikegani:'GRIF',itachi:'LAME',tsuru:'LAME',kasha:'FLAM',hitokage:'FLAM',kamado:'FLAM',oni:'GIVR',
+  yukidama:'VAPE',tsuchi:'VAPE',ashigaru:'VAPE',rokuro:'VAPE',yuzaru:'VAPE',braise:'BRAI',ippon:'BRAI',hitodama:'ONIB',chochin:'ONIB',toro:'ONIB',okuri:'ONIB',mokumoku:'ONIB',
+  smoke:'SUIE',nobusuma:'SUIE',kemuri:'SUIE',kabi:'SUIE',yoma:'SUIE',tayoma:'BOUE',kappa:'JETO',namazu:'BULL',akaname:'BULL',kawauso:'BULL',toad:'BULL',funa:'VAG',isonade:'VAG',
+  raiju:'ECLA',kirin:'ECLA',abura:'BOUE',doro:'BOUE',jubokko:'RONC',kodama:'RONC',takenoko:'RONC',ishigumo:'PICS',yamaarashi:'PICS',koma:'ROCH',nurikabe:'CHOC',mikoshi:'CHOC',
+  oboro:'CHOC',tsurube:'CHOC',sazae:'CHOC',beto:'CHOC',hone:'CHOC',gasha:'MORS',karakuri:'ROUA',tenome:'ROUA',okubi:'ROUA',zori:'ROUA',hikyaku:'ROUA',sune:'ROUA',ashinaga:'POIN',jorogumo:'GRIF'};
+ const BEAST='kamai itachi okuri nekomata kasha raiju kitsune koma tesso nobusuma yuzaru kawauso isonade heikegani kappa namazu tsuchi kemuri kirin yamaarashi ishigumo jorogumo oni toad tsuru karasu tengu sune hitokage mushi kamikiri sazae gasha'.split(' ');
+ const SPIRIT='yoma tayoma smoke braise hitodama funa hone noppera kabi uneri akaname mokumoku jubokko kodama rokuro ashinaga tenome ippon abura beto ittan chochin toro'.split(' ');
+ const ELP={'火':'FLAM BRAI VAPE','水':'VAG JETO BULL GIVR','木':'RONC FEUI VENT','土':'BOUE ROCH PICS','山':'ROCH PICS CHOC','雷':'ECLA FOUD','風':'VENT LAME FEUI','人':'POIN CHOC'};
+ const FAMP={beast:'GRIF MORS CHOC',object:'CHOC ROUA POIN',spirit:'ONIB SUIE SON'};
+ const ok=n=>!!(FX['e'+n]&&IM['FX_E'+n+'_0']),hs=t=>{let h=7;for(const c of t)h=(h*31+c.charCodeAt(0))>>>0;return h};
+ function pool(def){const K=def.kind,bt=K?(K.bt||K.s):(def.bt||def.id),id=String(def.wild&&!K?'yoma':bt).replace(/\d+$/,''),boss=!K&&!def.wild;let L=[],sig=null;
+  if(boss&&BOSSP[bt]){L=BOSSP[bt].split(' ');sig=L[0]}
+  else{sig=YSIG[id]||null;const h=hs(id),rot=(a,k)=>a.length?a.slice(k%a.length).concat(a.slice(0,k%a.length)):a,el=rot((ELP[def.res]||'').split(' ').filter(ok),h),
+    fam=rot(FAMP[BEAST.includes(id)?'beast':SPIRIT.includes(id)?'spirit':'object'].split(' ').filter(ok),h>>3);L=[sig,...el.slice(0,2),...fam.slice(0,2)]}
+  L=[...new Set(L.filter(n=>n&&ok(n)))];if(sig&&!ok(sig))sig=null;
+  if(L.length<2)for(const n of['CHOC','GRIF','VENT'])if(ok(n)&&!L.includes(n))L.push(n);
+  return{L:L.slice(0,boss||def.big?5:4),sig}}
+ function pick(def,B){const P=pool(def);if(!P.L.length)return null;const last=B&&B.lastAv;let c=P.L.filter(n=>n!==last||P.L.length<2);
+  let n=P.sig&&c.includes(P.sig)&&Math.random()<.38?P.sig:c[Math.floor(Math.random()*c.length)];if(B)B.lastAv=n;
+  const sigName=n===P.sig&&!def.wild&&!def.kind&&def.atk;return{n,nm:sigName||NM[n]||def.atk}}
  // attaque d'un ennemi : son effet sur Kaito (parée : l'effet s'arrête net avant l'impact)
- async function enemy(def,ok){if(!def)return false;const K=def.kind,bt=K?(K.bt||K.s):(def.bt||def.id);let n=window.BPZ&&BPZ.ef(bt);
-  if(!n)n={'火':'FLAM','水':'VAG','土':'BOUE','山':'CHOC','風':'VENT','雷':'FOUD','木':'VENT'}[def.res]||'GRIF';const k='e'+n;if(!FX[k]||!IM['FX_E'+n+'_0'])return false;
-  await play(k,ok?{stop:2,s:.8}:{});return true}
- return{has,play,setup,pose,fit,enemy}})();
+ async function enemy(def,ok_,av){if(!def)return false;const v=av||pick(def,null);if(!v)return false;const k='e'+v.n;if(!FX[k]||!IM['FX_E'+v.n+'_0'])return false;
+  await play(k,ok_?{stop:2,s:.8}:{});return true}
+ return{has,play,setup,pose,fit,enemy,pick,pool,NM}})();
 
 /* ---------- combat : poses des boss (repos, attaque, touché), planches dessinées découpées (tools/cutboss.py) ----------
    Les 3 poses partagent un même canevas (pied et centre du corps au même endroit) ; l'image du boss est agrandie pour que

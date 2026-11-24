@@ -6,8 +6,8 @@ android {
         applicationId 'com.jokizamurai.game'
         minSdk 26
         targetSdk 34
-        versionCode 318
-        versionName '0.318'
+        versionCode 319
+        versionName '0.319'
     }
     signingConfigs {
         debug {
