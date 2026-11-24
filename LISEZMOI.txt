@@ -1,4 +1,4 @@
-JŌKI ZAMURAI - projet Android (version 0.321)
+JŌKI ZAMURAI - projet Android (version 0.322)
 
 Ce dossier contient tout ce qu'il faut pour fabriquer l'application. Il n'est pas
 encore compilé : la compilation se fait sur GitHub (gratuit, depuis le téléphone)

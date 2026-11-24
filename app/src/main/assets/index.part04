@@ -12168,6 +12168,43 @@ window.LITE=(()=>{
    if(a<=.01)continue;g.globalAlpha=Math.min(1,a);g.drawImage(o.c,px,py,o.w,o.h)}}g.restore()};
  const oD=window.XDRAW;window.XDRAW=(m,L,g,X,Y,VW,VH)=>{oD&&oD(m,L,g,X,Y,VW,VH);if(m!=='world')draw(m,g,X,Y,VW,VH)};
  return{strip,draw,get LS(){return LS}}})();
+/* ---------- donjons : murs moins répétitifs ----------
+   L'intérieur des murs (mine, racines) répétait la même tuile assombrie, d'où des bandes régulières. On compose une fois, par donjon,
+   une grande texture de roche (6 × 6 cases) avec des morceaux de la partie haute de la tuile de mur elle-même (retournés, décalés, fondus),
+   raccordée sur ses bords ; chaque case de mur en prend sa part. Les faces de mur ordinaires sont retournées une fois sur deux, au hasard.
+   Les égouts (briques) gardent leur appareillage régulier. */
+(()=>{
+ const N=6,MC={},FL={},cellC={};
+ const rnd=sd=>()=>{sd=(sd*1103515245+12345)>>>0;return(sd>>>8)/16777216};
+ function macro(n,src){if(MC[n])return MC[n];const t=src.width,k=t/48,r0=Math.round((n===3?0:5)*k),r1=Math.round((n===3?27:33)*k),W=t*N,H=t*N;
+  const c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');g.imageSmoothingEnabled=false;const R=rnd(n*7919+13);
+  /* rangées de hauteur et de décalage variables, morceaux de largeur variable retournés au hasard : plus aucune bande régulière */
+  const seg=(sx,sy,sw,sh,dx,dy,f)=>{for(const ox of[-W,0,W])for(const oy of[-H,0,H]){const X=dx+ox,Y=dy+oy;if(X>=W||Y>=H||X+sw<=0||Y+sh<=0)continue;g.save();g.translate(X+(f?sw:0),Y);g.scale(f?-1:1,1);g.drawImage(src,sx,sy,sw,sh,0,0,sw,sh);g.restore()}};
+  const rows=(a0,a1)=>{for(let y=0;y<H;){const sh=Math.min(Math.round((14*k+R()*(a1-a0-14*k))),a1-a0),sy=a0+Math.floor(R()*(a1-a0-sh+1));let x=-Math.floor(R()*t);
+   while(x<W){const sw=Math.round(t*(.5+.5*R())),sx=Math.floor(R()*(t-sw+1));seg(sx,sy,sw,sh,x,y,R()<.5);x+=sw}y+=sh}};
+  if(n!==3)rows(r0,r1);
+  else{/* racines : la terre (bas de la tuile, assombrie) en fond, puis les racines seules (fond sombre retiré), semées dans tous les sens */
+   rows(Math.round(29*k),t);g.fillStyle='rgba(0,0,0,.45)';g.fillRect(0,0,W,H);
+   const RS=[];for(let q=0;q<5;q++){const sw=Math.round(t*(.55+.45*R())),sh=Math.round((r1-r0)*(.7+.3*R())),sx=Math.floor(R()*(t-sw+1)),sy=r0+Math.floor(R()*(r1-r0-sh+1)),rc=document.createElement('canvas');rc.width=sw;rc.height=sh;const rg=rc.getContext('2d');rg.drawImage(src,sx,sy,sw,sh,0,0,sw,sh);
+    try{const id=rg.getImageData(0,0,sw,sh),d=id.data;for(let i=0;i<d.length;i+=4){const L=(d[i]+d[i+1]+d[i+2])/3;d[i+3]=L<22?0:L<30?140:255}rg.putImageData(id,0,0)}catch(_){}RS.push(rc)}
+   const cnt=Math.round(N*N*2.2);for(let q=0;q<cnt;q++){const rc=RS[Math.floor(R()*RS.length)],x=Math.floor(R()*W),y=Math.floor(R()*H),rot=Math.floor(R()*4),f=R()<.5;
+    for(const ox of[-W,0,W])for(const oy of[-H,0,H]){const X=x+ox,Y=y+oy,m=Math.max(rc.width,rc.height);if(X-m>W||Y-m>H||X+m<0||Y+m<0)continue;g.save();g.translate(X,Y);g.rotate(rot*Math.PI/2);g.scale(f?-1:1,1);g.drawImage(rc,-rc.width/2,-rc.height/2);g.restore()}}}
+  /* lumière inégale à grande échelle (raccordée sur les bords) : des creux et des bosses dans la roche */
+  try{const id=g.getImageData(0,0,W,H),d=id.data,P=Math.PI*2,a=R()*P,b=R()*P,e=R()*P;
+   for(let y=0;y<H;y++)for(let x=0;x<W;x++){const u=x/W,v=y/H,m=.84+.11*Math.sin(P*2*u+a)*Math.sin(P*2*v+b)+.07*Math.sin(P*(3*u+2*v)+e)+.04*Math.sin(P*(5*v-u*1))
+    ,q=(y*W+x)*4;d[q]*=m;d[q+1]*=m;d[q+2]*=m}g.putImageData(id,0,0)}catch(_){}
+  return MC[n]=c}
+ function cell(n,src,x,y){const k=n+'_'+((x%N+N)%N)+'_'+((y%N+N)%N);if(cellC[k])return cellC[k];const m=macro(n,src),t=src.width,c=document.createElement('canvas');c.width=t;c.height=t;
+  c.getContext('2d').drawImage(m,((x%N+N)%N)*t,((y%N+N)%N)*t,t,t,0,0,t,t);return cellC[k]=c}
+ function flip(im){let f=FL.get?FL.get(im):null;if(f)return f;const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const g=c.getContext('2d');g.translate(im.width,0);g.scale(-1,1);g.drawImage(im,0,0);FL.set(im,c);return c}
+ const hs=(x,y)=>{let h=(x*374761393+y*668265263)>>>0;h=(h^(h>>>13))*1274126177>>>0;return h^(h>>>16)};
+ const wrap=()=>{const old=window.DJTILE;if(!old||old.__v)return!!old;
+  const nw=(M,c,x,y)=>{const im=old(M,c,x,y);const n=M.dj,s=M.src,o=s&&s[y]&&s[y][x];if(!im||o!=='#'||n===2)return im;
+   const dn=s[y+1]&&s[y+1][x];if(dn&&dn!=='#'){const f=XI['T_DJ'+(n===4?1:n)+'_10'];if(f&&im===f&&hs(x,y)%2)return flip(im);return im}
+   return cell(n,im,x,y)};
+  nw.__v=1;window.DJTILE=nw;return true};
+ Object.assign(FL,{m:new WeakMap()});FL.get=k=>FL.m.get(k);FL.set=(k,v)=>FL.m.set(k,v);
+ if(!wrap()){let n=0;const iv=setInterval(()=>{if(wrap()||++n>200)clearInterval(iv)},50)}})();
 window.YID=(()=>{
  const st=document.createElement('style');
  st.textContent='@media (prefers-reduced-motion:no-preference){'+
