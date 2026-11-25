@@ -43,6 +43,8 @@ jobs:
       - name: Ranger l'APK dans la branche « apk » (téléchargement direct)
         run: |
           mkdir /tmp/out && cp app/build/outputs/apk/debug/app-debug.apk /tmp/out/JokiZamurai.apk
-          cd /tmp/out && git init -q -b apk && git add JokiZamurai.apk
+          # GitHub refuse les fichiers de plus de 100 Mo : l'APK est rangé en morceaux de 60 Mo (cat JokiZamurai.apk.part* > JokiZamurai.apk)
+          cd /tmp/out && split -b 60m -d JokiZamurai.apk JokiZamurai.apk.part && rm JokiZamurai.apk
+          git init -q -b apk && git add JokiZamurai.apk.part*
           git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -q -m "APK ${GITHUB_SHA::7}"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" apk
