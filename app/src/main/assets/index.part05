@@ -12784,9 +12784,9 @@ window.WAN=(()=>{
  const put=(nm,c)=>{XI[nm]=c;KM.set(c,nm);return c};
  const fromMask=(P,m)=>{const c=cvs(P.W,P.H),g=c.getContext('2d'),id=g.createImageData(P.W,P.H),o=id.data,D=P.D;for(let i=0;i<P.W*P.H;i++)if(m[i]){const j=i*4;o[j]=D[j];o[j+1]=D[j+1];o[j+2]=D[j+2];o[j+3]=D[j+3]}g.putImageData(id,0,0);return c};
  /* lueur : les pixels lumineux de l'objet lui-même, plus un halo flou de ces mêmes pixels ; _y1 = bas de la flamme (pour l'étirer depuis sa base) */
- const glowOf=(nm,im,sel,r,bo)=>{if(XI[nm]&&XI[nm].width)return XI[nm];if(!im||!im.width)return null;let c=null;try{const P=pix(im),W=P.W,H=P.H,D=P.D,f=SEL[sel],m=new Uint8Array(W*H),[x0,y0,x1,y1]=r||[0,0,W,H];let n=0,yb=0;
+ const GNEG=new Set();const glowOf=(nm,im,sel,r,bo)=>{if(XI[nm]&&XI[nm].width)return XI[nm];if(!im||!im.width)return null;if(GNEG.has(nm))return null;let c=null;try{const P=pix(im),W=P.W,H=P.H,D=P.D,f=SEL[sel],m=new Uint8Array(W*H),[x0,y0,x1,y1]=r||[0,0,W,H];let n=0,yb=0;
    for(let y=Math.max(0,y0);y<Math.min(H,y1);y++)for(let x=Math.max(0,x0);x<Math.min(W,x1);x++){const i=y*W+x,j=i*4;if(f(D[j],D[j+1],D[j+2],D[j+3])){m[i]=1;n++;if(y>yb)yb=y}}
-   if(n>=3){const k=fromMask(P,m);if(bo){const kg=k.getContext('2d'),id=kg.getImageData(0,0,W,H),q=id.data;for(let i=0;i<q.length;i+=4)if(q[i+3]){const f=255/Math.max(1,q[i],q[i+1],q[i+2]);q[i]*=f;q[i+1]*=f;q[i+2]*=f}kg.putImageData(id,0,0)}c=cvs(W,H);const g=c.getContext('2d');try{g.filter=`blur(${Math.max(1.5,W/45).toFixed(1)}px)`;g.drawImage(k,0,0);g.filter='none'}catch(e){}g.globalAlpha=.85;g.drawImage(k,0,0);c._y1=(yb+1)/H;put(nm,c)}}catch(e){c=null}return c};
+   if(n>=3){const k=fromMask(P,m);if(bo){const kg=k.getContext('2d'),id=kg.getImageData(0,0,W,H),q=id.data;for(let i=0;i<q.length;i+=4)if(q[i+3]){const f=255/Math.max(1,q[i],q[i+1],q[i+2]);q[i]*=f;q[i+1]*=f;q[i+2]*=f}kg.putImageData(id,0,0)}c=cvs(W,H);const g=c.getContext('2d');try{g.filter=`blur(${Math.max(1.5,W/45).toFixed(1)}px)`;g.drawImage(k,0,0);g.filter='none'}catch(e){}g.globalAlpha=.85;g.drawImage(k,0,0);c._y1=(yb+1)/H;put(nm,c)}}catch(e){c=null}if(!c)GNEG.add(nm);return c};
  const GL2={X_D_fire:[['fire',1.8,'st']],X_D_cfire:[['fire',1.8,'st']],X_D_kfire:[['blue',1.6,'st']],X_D_bkettle:[['fire',1.6,'st',[0,52,62,78]]],X_B21_CANDLE:[['fire',2,0,0,1]],
   X_D_clamp:[['lamp2',1.5,0,[0,0,24,40]]],X_D_ilamp:[['lamp',1.5]],X_D_zlamp:[['lamp',1.4]],X_D_yatai:[['red',1.2,0,0,1]],X_B20_CRYST:[['tw',1.3,'tw']],X_FT0:[['fire',1.6,'st']],X_FT2:[['fire',1.3]],X_B21_BASIN:[['wat',1.1,'tw']],
   X_D_wsignal:[['sgR',1.1,'sa',0,1],['sgG',1.1,'sb',0,1]],X_W_SIGNAL:[['sgR',1.1,'sa',0,1],['sgG',1.1,'sb',0,1]]};
@@ -12818,7 +12818,7 @@ window.WAN=(()=>{
  /* bateaux sur l'eau : ils tanguent */
  const BOB={X_RBOAT:1,X_D_bboat:1,X_B17_BOAT:1};
  /* la forge : le foyer et la fenêtre rougeoient, les deux cheminées fument (bouffées prises dans le panache de la maison des mines) */
- const BGL={X_FORGE:{g:[['fire',179,177,229,217]],k:1.2,e:[[330,6],[366,8]]},
+ const BGL={X_FORGE:{g:[['fire',185,180,240,234]],k:1.2,e:[[330,6],[366,8]]},
   X_V_ZC0:{e:[[108,8]]},X_V_ZB7:{e:[[8,12]]},X_V_ZB2:{e:[[200,13]]},X_V_ZG4:{e:[[183,2]]},X_V_ZG9:{e:[[68,2]]},
   X_V_ZD7:{e:[[216,128]]},X_V_ZD2:{e:[[216,128]]},
   X_V_ZI2:{g:[['lamp2',60,78,138,135],['lamp2',80,194,115,218],['red',0,66,25,104],['red',172,66,199,104]],k:.9},X_V_ZI0:{g:[['lamp2',78,110,111,133],['red',0,84,23,125],['red',167,84,190,125]],k:.9},
@@ -12827,7 +12827,7 @@ window.WAN=(()=>{
  const EMT={X_FT2:[[45,54,.7]],X_FT3:[[22,10,.5]],X_D_valve:[[24,3,.6]],X_D_gpneu:[[34,16,.5]],X_D_pgas:[[13,3,.4]]};
  /* girouette : le coq et la flèche tournent autour du mât (le reste ne bouge pas) */
  const YAW={X_D_wvane:{r:[0,0,47,34],px:26}};
- const glowMulti=(nm,im,L)=>{if(XI[nm]&&XI[nm].width)return XI[nm];if(!im||!im.width)return null;let c=null;for(const[s,x0,y0,x1,y1]of L){const q=glowOf(nm+'_'+s+x0,im,s,[x0,y0,x1,y1]);if(q){if(!c)c=cvs(im.width,im.height);c.getContext('2d').drawImage(q,0,0)}}if(c)put(nm,c);return c};
+ const glowMulti=(nm,im,L)=>{if(XI[nm]&&XI[nm].width)return XI[nm];if(!im||!im.width)return null;if(GNEG.has(nm))return null;let c=null;for(const[s,x0,y0,x1,y1]of L){const q=glowOf(nm+'_'+s+x0,im,s,[x0,y0,x1,y1]);if(q){if(!c)c=cvs(im.width,im.height);c.getContext('2d').drawImage(q,0,0)}}if(c)put(nm,c);else GNEG.add(nm);return c};
  const YAC=new Map();
  const yawOf=(k,im)=>{if(YAC.has(k))return YAC.get(k);if(!im||!im.width)return null;let out=null;const C=YAW[k];try{const P=pix(im),W=P.W,H=P.H,D=P.D,[x0,y0,x1,y1]=C.r,m=new Uint8Array(W*H),bm=new Uint8Array(W*H);
    for(let i=0;i<W*H;i++){if(D[i*4+3]<=0)continue;const x=i%W,y=(i/W)|0;if(x>=x0&&x<x1&&y>=y0&&y<y1)m[i]=1;else bm[i]=1}
