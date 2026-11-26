@@ -5222,7 +5222,7 @@ let ZBAND=null;const SMKC={};function smokeSpr(col){if(SMKC[col])return SMKC[col
  const b=mkc(140,42),y=b.getContext('2d'),gr=y.createRadialGradient(70,70,2,70,70,70);gr.addColorStop(0,`rgba(${col},1)`);gr.addColorStop(1,`rgba(${col},0)`);y.scale(1,.3);y.fillStyle=gr;y.beginPath();y.arc(70,70,70,0,7);y.fill();
  return SMKC[col]={puff:p,band:b}}
 const BHR=window.__BHR={"X_H_TOWER": 2.6,"X_K_WRECK": 1.902,"X_P_HANGAR": 1.902, "X_P_SHIP": 1.902, "X_C_TRAM": 1.902, "X_G_GATE": 1.902, "X_F_HALL": 1.902, "X_R_FERRY": 1.902, "X_A_SEKI": 1.902, "X_DOJO": 1.748, "X_FORGE": 1.5, "X_F_BARR": 1.901, "X_F_WARE": 1.3, "X_F_PUMP": 1.299, "X_F_CANT": 1.299, "X_R_0": 1.251, "X_R_1": 1.248, "X_R_2": 1.25, "X_R_3": 1.302, "X_H_FARM": 1.199};
-function drawBld(X,b,ox,oy){let im=XI[b.im];if(!im||!im.width)return;if(b.tint)im=tintImg(im,b.tint);const sc=(b.sc||1)/(BHR[b.im]||1),w=im.width/3*sc,h=im.height/3*sc,cxm=b.x*T+b.w*T/2+(b.ddx||0)-ox,by=(b.y+b.h)*T+2-oy;const im2=window.HQB?HQB(im,w*3,h*3):im;if(b.flip){X.save();X.translate(Math.round(cxm),0);X.scale(-1,1);X.drawImage(im2,-w/2,Math.round(by-h),w,h);X.restore()}else X.drawImage(im2,Math.round(cxm-w/2),Math.round(by-h),w,h)}
+function drawBld(X,b,ox,oy){let im=XI[b.im];if(!im||!im.width)return;if(b.tint)im=tintImg(im,b.tint);const sc=(b.sc||1)/(BHR[b.im]||1),w=im.width/3*sc,h=im.height/3*sc,cxm=b.x*T+b.w*T/2+(b.ddx||0)-ox,by=(b.y+b.h)*T+2-oy;const up_=(b.sc||1)/(BHR[b.im]||1)>1.05,sm_=X.imageSmoothingEnabled;if(up_){X.imageSmoothingEnabled=true;X.imageSmoothingQuality='high'}if(b.flip){X.save();X.translate(Math.round(cxm),0);X.scale(-1,1);X.drawImage(im,-w/2,Math.round(by-h),w,h);X.restore()}else X.drawImage(im,Math.round(cxm-w/2),Math.round(by-h),w,h);if(up_)X.imageSmoothingEnabled=sm_}
 function solid(x,y){if(window.XSOLID&&XSOLID(MID,x,y))return true;const c=at(x,y);if(M.bld)for(const b of M.bld)if(x>=b.x&&x<b.x+b.w&&y>=bldWall(b)&&y<b.y+b.h)return !(M.warps||[]).some(w=>w.x===x&&w.y===y)&&!(MID==='world'&&window.BFREE&&BFREE.has(x+','+y));if(c==='G')return gateClosed(x,y);return SOLID.includes(c)&&!(MID==='world'&&window.XFREE&&XFREE(x,y,c))}
 function blocked(x,y,ex){return solid(x,y)||!!entAt(x,y,ex)||(ex!==H&&H.x===x&&H.y===y)}
 function startMove(e,d,dur,hop){const[dx,dy]=DIRS[d];e.dir=d;e.mv={fx:e.x,fy:e.y,tx:e.x+dx*(hop?2:1),ty:e.y+dy*(hop?2:1),p:0,dur:dur*(hop?1.7:1),hop:!!hop};e.x=e.mv.tx;e.y=e.mv.ty;e.stepN++}
@@ -13511,17 +13511,13 @@ window.KREAD={"一":[["kun","ひと(つ)","一つ","ひとつ","un (objet)",""],
 /* ===================== v339 : bâtiments plus nets, ombres portées, dojo et forge identiques partout, moulin qui tourne en continu ===================== */
 (()=>{
  const ok=im=>im&&im.width>0,BH=()=>window.__BHR||{};
- /* ---------- 1. bâtiments agrandis à l'écran : rééchantillonnage soigné (lissage haute qualité + accentuation) au lieu du plus proche voisin ---------- */
- const HQ=new WeakMap(),LRU=[];
- window.HQB=(im,W,H)=>{W=Math.round(W);H=Math.round(H);if(!ok(im)||W<=im.width*1.05||W>4096||H>4096)return im;let m=HQ.get(im);if(!m){m=new Map();HQ.set(im,m)}const k=W+'x'+H;let c=m.get(k);if(c)return c;
-  c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(im,0,0,W,H);
-  try{const d=x.getImageData(0,0,W,H),s=d.data,o=new Uint8ClampedArray(s),A=.6,R=W*4;for(let y=1;y<H-1;y++)for(let xx=1;xx<W-1;xx++){const i=y*R+xx*4;if(s[i+3]<16)continue;for(let ch=0;ch<3;ch++){const v=s[i+ch];o[i+ch]=v+A*(v-(s[i-4+ch]+s[i+4+ch]+s[i-R+ch]+s[i+R+ch])/4)}}d.data.set(o);x.putImageData(d,0,0)}catch(e){}
-  m.set(k,c);LRU.push([m,k]);if(LRU.length>70){const[mm,kk]=LRU.shift();mm.delete(kk)}return c};
+ /* ---------- 1. bâtiments agrandis à l'écran : lissage du navigateur au moment du dessin (v342 : l'ancien rééchantillonnage en mémoire faisait chuter les images par seconde) ---------- */
+ window.HQB=im=>im;
  /* ---------- 2. ombres portées : la silhouette du décor, couchée vers le bas à droite (lumière venue d'en haut à gauche) ---------- */
  const SIL=new WeakMap();
- const sil=im=>{let c=SIL.get(im);if(c)return c;c=document.createElement('canvas');c.width=im.width+8;c.height=im.height+8;const x=c.getContext('2d');try{x.filter='blur(1.2px)'}catch(e){}x.drawImage(im,4,4);try{x.filter='none'}catch(e){}x.globalCompositeOperation='source-in';x.fillStyle='#0c1020';x.fillRect(0,0,c.width,c.height);SIL.set(im,c);return c};
- const cast=(X,im,cx,by,w,h,flip,al,k,q)=>{const s=sil(im),px=w/im.width;X.save();X.globalAlpha=al;X.translate(cx,by);X.transform(1,0,-k,-q,0,0);if(flip)X.scale(-1,1);X.drawImage(s,-w/2-4*px,-h-4*px,w+8*px,h+8*px);X.restore()};
- window.SHB=(X,b)=>{if(S.fxoff)return;const im=XI[b.im];if(!ok(im))return;const sc=(b.sc||1)/(BH()[b.im]||1),w=im.width/3*sc,h=im.height/3*sc;if(h<28)return;
+ const sil=im=>{let c=SIL.get(im);if(c)return c;const W=Math.max(1,Math.round(im.width/3)),H=Math.max(1,Math.round(im.height/3));c=document.createElement('canvas');c.width=W+4;c.height=H+4;const x=c.getContext('2d');x.imageSmoothingEnabled=true;try{x.filter='blur(.6px)'}catch(e){}x.drawImage(im,2,2,W,H);try{x.filter='none'}catch(e){}x.globalCompositeOperation='source-in';x.fillStyle='#0c1020';x.fillRect(0,0,c.width,c.height);c.p=2/W;SIL.set(im,c);return c};
+ const cast=(X,im,cx,by,w,h,flip,al,k,q)=>{const s=sil(im),px=w/im.width;X.save();X.globalAlpha=al;X.translate(cx,by);X.transform(1,0,-k,-q,0,0);if(flip)X.scale(-1,1);const pd=s.p*w;X.imageSmoothingEnabled=true;X.drawImage(s,-w/2-pd,-h-pd,w+2*pd,h+2*pd);X.restore()};
+ window.SHB=(X,b)=>{if(S.fxoff)return;const im=XI[b.im];if(!ok(im))return;try{const m=X.getTransform(),ya=-m.f/m.d,yb=ya+X.canvas.height/m.d,by=(b.y+b.h)*16;if(by<ya-8||by-im.height/3*1.6>yb)return}catch(e){}const sc=(b.sc||1)/(BH()[b.im]||1),w=im.width/3*sc,h=im.height/3*sc;if(h<28)return;
   cast(X,im,b.x*16+b.w*8+(b.ddx||0),(b.y+b.h)*16+1,w,h,b.flip,.34,.4,.2)};
  window.SHP=(X,o)=>{if(S.fxoff||o.fl||o.nosh)return;const im=o.shIm||o.im;if(!ok(im)||o.hh<16||o.w<6)return;
   cast(X,im,o.x*16+8+o.dx,o.sy-1,o.shW||o.w,o.shH||o.hh,0,.3,.5,.26)};
