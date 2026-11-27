@@ -5761,11 +5761,11 @@ const Battle=(()=>{
  const jl=(jp,fr)=>({jp,fr});
  function info(){const e=B.e,known=S.wins[e.id]||S.fl['w_'+e.id]||e.wild;$('#bInfo').innerHTML=`<b>${esc(e.n)}</b> — ${esc(e.clue||'')}<br><small>${e.trait&&TRAITS[e.trait]?'<b style="color:#58e0ec">'+esc(TRAITS[e.trait][0])+'</b> · '+esc(TRAITS[e.trait][1]):'Les kanji « à réviser » frappent plus fort, et moins tu as d\'aide au tracé, plus le coup porte.'}</small>`}
  function menu(){return new Promise(res=>{UI.panel('bat');info();$('#bCmd').classList.remove('hidden');$('#bList').classList.add('hidden');$('#bBack').classList.add('hidden');
-  $('#bCmd').querySelector('[data-c=phrase]').classList.toggle('off',!lessonsDone().length||B.phCd>0);$('#bCmd').querySelector('[data-c=listen]').classList.toggle('off',B.liCd>0);
+  $('#bCmd').querySelector('[data-c=phrase]').classList.toggle('off',(!window.PRO&&!lessonsDone().length)||B.phCd>0);$('#bCmd').querySelector('[data-c=listen]').classList.toggle('off',B.liCd>0||!!window.PRO);
   const t0=performance.now();$('#bCmd').style.opacity=.55;setTimeout(()=>{$('#bCmd').style.opacity=''},450);$('#bCmd').onclick=e=>{const b=e.target.closest('button');if(!b||performance.now()-t0<450)return;sfx('sel');res(b.dataset.c)}})}
  function list(html){return new Promise(res=>{$('#bCmd').classList.add('hidden');const l=$('#bList');l.classList.remove('hidden');l.innerHTML=html;$('#bBack').classList.remove('hidden');
   const t0=performance.now();l.onclick=e=>{const b=e.target.closest('button');if(!b||b.classList.contains('lock')||performance.now()-t0<400)return;sfx('sel');res(b.dataset.k)};$('#bBack').onclick=()=>{sfx('back');res(null)}})}
- const spellList=()=>{B.hand=B.hand||battleHand(B.cool);return list(B.hand.map(sp=>{const due=Review.kDue(sp.k),el=elem(sp.k);return `<button class="btn sp" data-k="${SP.indexOf(sp)}"><span class="k" style="color:${el[1]}">${sp.k}</span><span class="d"><b>${esc(sp.name)} · ${esc(sp.kun)}</b><span class="ty" style="background:${due?'#c8901c':'#3a4a78'}">${due?'à réviser ×1,5':AIDN[aidOf(sp.k)]}</span> <i>${starsTxt(S.best[sp.k]||0)}</i></span></button>`}).join(''))};
+ const spellList=()=>{if(window.PRO&&window.PROK){if(B.prohT!==B.turn||!B.proh){const kk=PROK.known().filter(q=>[...q].length===1&&KANA[q]&&!B.cool[q]);B.proh=shuf(kk).slice(0,6).map(q=>({k:q,name:PROK.readOf(q),fr:PROK.kat(q)?'katakana':'hiragana',kun:q,on:q,s:KANA[q]}));B.prohT=B.turn}return list(B.proh.map((sp,i)=>`<button class="btn sp" data-k="${i}"><span class="k" style="color:#58e0ec">${sp.k}</span><span class="d"><b>${esc(sp.name)}</b><span class="ty" style="background:#3a4a78">${sp.fr}</span> <i>${starsTxt(S.best[sp.k]||0)}</i></span></button>`).join(''))}B.hand=B.hand||battleHand(B.cool);return list(B.hand.map(sp=>{const due=Review.kDue(sp.k),el=elem(sp.k);return `<button class="btn sp" data-k="${SP.indexOf(sp)}"><span class="k" style="color:${el[1]}">${sp.k}</span><span class="d"><b>${esc(sp.name)} · ${esc(sp.kun)}</b><span class="ty" style="background:${due?'#c8901c':'#3a4a78'}">${due?'à réviser ×1,5':AIDN[aidOf(sp.k)]}</span> <i>${starsTxt(S.best[sp.k]||0)}</i></span></button>`}).join(''))};
  const itemList=()=>list(Object.keys(IT).filter(k=>!IT[k].map&&(S.it[k]>0||k==='oni'||k==='cha')).map(k=>`<button class="btn sp ${S.it[k]>0?'':'lock'}" data-k="${k}"><span class="k"><img class="ic big" src="${IM['I_'+k.toUpperCase()]||IM.I_ONI}" alt=""></span><span class="d"><b>${jpHtml(IT[k].t)} ×${S.it[k]||0}</b>${esc(IT[k].d)}</span></button>`).join(''));
  /* effets visuels des sorts */
  const BSC={el:id=>$('#'+id),cls(id,c,ms){const e=$('#'+id);e.classList.remove(c);void e.offsetWidth;e.classList.add(c);if(ms)setTimeout(()=>e.classList.remove(c),ms)},
@@ -5799,16 +5799,18 @@ const Battle=(()=>{
   let out=null;
   while(!out){
    // --- tour du joueur ---
+   if(window.PRO&&!S.fl.tut_pk){S.fl.tut_pk=1;S.fl.tut_b=1;await msg('Combat de kana ! 術 (じゅつ) : tu traces un kana que tu connais pour attaquer. Plus le tracé est propre, plus ça frappe.',{auto:0});await msg('言葉 (ことば) : tu lis un kana. Si c\'est juste, le yōkai est touché et reste figé un tour.',{auto:0});await msg('Quand il attaque, lis vite le kana qui s\'affiche : tu pares le coup.',{auto:0})}
    if(!S.fl.tut_b){S.fl.tut_b=1;await msg('À toi de jouer. 術 (じゅつ) : tu traces un kanji pour attaquer. Plus le tracé est propre, plus ça frappe.',{auto:0});await msg('言葉 (ことば) : tu réponds à une question sur tes leçons. Si c\'est juste, l\'ennemi est touché et reste figé un tour.',{auto:0});await msg('聞く (きく) : tu écoutes une phrase pour deviner sa prochaine attaque. 道具 (どうぐ) : ton sac, pour te soigner.',{auto:0})}
    if(B.handT!==B.turn){B.hand=null;B.handT=B.turn}
    D.show({t:'Que fais-tu ?'},{panel:false,auto:1,noarr:1});Input.onA=null;let acted=false;
    const c=await menu();Input.onA=null;
-   if(c==='spell'){const k=await spellList();if(k===null)continue;const sp=SP[+k],wasDue=Review.kDue(sp.k);D.hide();const r=await Trace.run(sp,B.sumi?{aid:0}:def.trait==='fog'?{aid:3}:null);UI.panel('bat');$('#bCmd').classList.add('hidden');$('#bList').classList.add('hidden');$('#bBack').classList.add('hidden');if(!r)continue;
+   if(c==='spell'){const k=await spellList();if(k===null)continue;const sp=window.PRO&&window.PROK&&B.proh?B.proh[+k]:SP[+k],wasDue=Review.kDue(sp.k);D.hide();const r=await Trace.run(sp,B.sumi?{aid:0}:def.trait==='fog'?{aid:3}:null);UI.panel('bat');$('#bCmd').classList.add('hidden');$('#bList').classList.add('hidden');$('#bBack').classList.add('hidden');if(!r)continue;
     S.best[sp.k]=Math.max(S.best[sp.k]||0,r.stars);let m=1,eff=null;B.hand=null;if(wasDue){m*=def.el?2:1.5;eff=jl(['復習|ふくしゅう','の','力|ちから','！'],`Kanji révisé : dégâts ×${def.el?'2':'1,5'} !`)}if(B.boost){m*=1.5;B.boost=0}if(B.ofuda){B.ofuda=0;m*=(def.el||!def.wild)?2:1.3;eff=eff||jl(['お札|おふだ','の','力|ちから','！'],'Le talisman flambe !')}let tmsg=null;if(def.trait==='words'){m*=.5;tmsg='Le kanji glisse sur sa toile : dégâts ÷2. Une phrase lui ferait bien plus mal !'}if(def.trait==='mimic'){if(B.lastK===sp.k){m*=.5;tmsg=`${def.n} connaît déjà ${sp.k} par cœur : dégâts ÷2. Change de kanji !`}B.lastK=sp.k}
     await msg(`${sp.k} ${sp.name} ! ${starsTxt(r.stars)}`,{auto:500});say(sp.kun);await heroLunge();sfx('spell');await BSC.cut(sp);sfx('spell');await (window.BFX&&BFX.has(sp.k)?BFX.play(sp.k):SpellFx.play(sp.k));const d=Math.round((6+7*r.stars)*m*(1+.1*(r.aid||0)));B.cool[sp.k]=3;if(r.aid)await msg(`${AIDN[r.aid]} : dégâts +${r.aid*10} % !`,{auto:700});await hitE(d,m>1);if(tmsg)await msg(tmsg,{auto:1700});if(eff)await msg([eff],{auto:1100});await msg(`${def.n} perd ${B.ld} PV.`,{auto:650});acted=true}
    else if(c==='phrase'&&B.phCd>0){await msg(`Tes mots doivent reprendre leur souffle : encore ${B.phCd} tour${B.phCd>1?'s':''}.`,{auto:1300});continue}
+   else if(c==='listen'&&window.PRO){await msg('Écouter les yōkai, ce sera pour plus tard. Pour l\'instant, lis !',{auto:1400});continue}
    else if(c==='listen'&&B.liCd>0){await msg(`Il se méfie et se tait : encore ${B.liCd} tour${B.liCd>1?'s':''} avant de pouvoir l'écouter.`,{auto:1300});continue}
-   else if(c==='phrase'){const e=pickEx();if(!e){await msg('Tu ne connais encore aucune leçon. Va voir un sensei !',{auto:1500});continue}D.hide();
+   else if(c==='phrase'){const e=window.PRO&&window.PROQ?PROQ():pickEx();if(!e){await msg('Tu ne connais encore aucune leçon. Va voir un sensei !',{auto:1500});continue}D.hide();
     const ok=await Ex.run(e,{head:'<b>言葉の力 · Pouvoir des mots</b> · ',quit:1});if(ok==='quit'){UI.panel('bat');continue}UI.panel('bat');$('#bCmd').classList.add('hidden');$('#bList').classList.add('hidden');$('#bBack').classList.add('hidden');
     if(ok){await msg([jl(['言葉|ことば','の','力|ちから','！'],'Le pouvoir des mots !')],{auto:900});await heroLunge();sfx('spell');await More.phraseFx(e);if(window.BFX)await BFX.play('slash');{const pd=def.trait==='words'?48:24;await hitE(pd,true);B.stun=1;B.phCd=3;await msg(`${def.n} perd ${B.ld} PV et reste figé !`+(pd>24?' Les mots, ça le traverse.':''),{auto:900})}}
     else await msg('La formule se brise… Ta phrase n\'a aucun effet.',{auto:1200});acted=true}
@@ -5832,8 +5834,8 @@ const Battle=(()=>{
    const eq=def.trait==='ear'?Oral.q('mix'):null;
    if(!S.fl.tut_p){S.fl.tut_p=1;await msg('L\'ennemi va attaquer. Une question apparaît : réponds juste avant la fin du temps et tu pares le coup, sans aucun dégât.',{auto:0})}
    await msg(eq?`${def.n} lance « ${B.an||def.atk} » ! Tends l'oreille pour parer !`:`${def.n} prépare « ${B.an||def.atk} » ! Réponds vite pour parer !`,{auto:900});
-   const eQ=!eq&&Math.random()<.35?(()=>{const L=Object.values(S.er||{}).filter(o=>o.q&&o.q.q==='mcq'&&o.q.o);return L.length?JSON.parse(JSON.stringify(L[Math.floor(Math.random()*L.length)].q)):null})():null,useG=lessonsDone().length&&Math.random()<.6,q=eq||eQ||(useG&&pickEx(x=>x.q!=='ord'))||(Math.random()<.45&&Vocab.pq())||Ex.kanjiQ();D.hide();
-   const ok=await Ex.run(q,{timed:(eq?15000:useG?10000:6500)*(def.trait==='frost'?.75:1)*(B.ume?1.6:1),head:eq?'<b>受け · Parade à l\'oreille</b> · ':eQ?'<b>誤 · Une ancienne erreur revient !</b> · ':'<b>受け · Parade</b> · '});if(eq){const s=Oral.st();s.l++;if(ok)s.lo++}UI.panel('bat');$('#bCmd').classList.add('hidden');$('#bList').classList.add('hidden');$('#bBack').classList.add('hidden');
+   const eQ=!window.PRO&&!eq&&Math.random()<.35?(()=>{const L=Object.values(S.er||{}).filter(o=>o.q&&o.q.q==='mcq'&&o.q.o);return L.length?JSON.parse(JSON.stringify(L[Math.floor(Math.random()*L.length)].q)):null})():null,useG=lessonsDone().length&&Math.random()<.6,q=(window.PRO&&window.PROQ&&PROQ())||eq||eQ||(useG&&pickEx(x=>x.q!=='ord'))||(Math.random()<.45&&Vocab.pq())||Ex.kanjiQ();D.hide();
+   const ok=await Ex.run(q,{timed:(window.PRO?9000:eq?15000:useG?10000:6500)*(def.trait==='frost'?.75:1)*(B.ume?1.6:1),head:eq?'<b>受け · Parade à l\'oreille</b> · ':eQ?'<b>誤 · Une ancienne erreur revient !</b> · ':'<b>受け · Parade</b> · '});if(eq){const s=Oral.st();s.l++;if(ok)s.lo++}UI.panel('bat');$('#bCmd').classList.add('hidden');$('#bList').classList.add('hidden');$('#bBack').classList.add('hidden');
    if(window.BPZ)BPZ.pose(1);BSC.cls(def.boss?'bsBg':'bsEn','atk',450);await tween(300,p=>{B.lunge=-Math.sin(p*Math.PI)*14});B.lunge=0;if(window.BFX&&BFX.enemy)await BFX.enemy(def,ok,B.av);if(window.BPZ)BPZ.back();
    if(ok){sfx('ok');await msg([jl(['うけた','！'],'Parade réussie ! Aucun dégât.')],{auto:900})}
    else if(B.bento){B.bento=0;sfx('ok');await msg('Le coup glisse : tu avais bien mangé. Aucun dégât.',{auto:1100})}
@@ -5846,7 +5848,7 @@ const Battle=(()=>{
    if(level(S.xp)>level(old)){sfx('lvl');$('#mLv').textContent='Nv '+level(S.xp);await msg([jl(['レベル','アップ','！'],`Niveau ${level(S.xp)} !`)],{auto:1300})}
    if(def.word)await msg([{jp:def.word.t,fr:`Mot libéré : ${def.word.fr}`}],{auto:1500})}
   save();D.hide();await UI.fade(1,260);$('#hpE').classList.add('hidden');$('#hpM').classList.add('hidden');$('#bscene').classList.add('hidden');$('#app').classList.remove('battle');B=null;G.scene='world';music(pm);if(out==='lose')respawnNow();
-  if(out==='win'&&stage(S.xp)>stage(old)){await Evo.run(stage(old),stage(S.xp))}
+  if(out==='win'&&!window.PRO&&stage(S.xp)>stage(old)){await Evo.run(stage(old),stage(S.xp))}
   UI.panel('pad');await UI.fade(0,260);return out}
  return{start,drawScene,get on(){return !!B},dbg:()=>B}})();
 
@@ -5993,7 +5995,7 @@ const WCOL=[['#58b8f0','土','水','eau'],['#f08858','水','火','feu'],['#68c86
 const GREQ={kakashi:['l3','l4'],karakasa:['l5','l6'],smoke:['l7'],toad:['l8']};
 const zoneCleared=z=>!!S.wins[[0,'kakashi','karakasa','smoke','toad','boss','yuki','nuri','umi','wanyudo','kyorin','baku','nue','yamabiko','ungai','kaze','tetsu'][z]];
 function gateOpen(gt){if((PART===12||PART===34)&&gt.need==='baku')return false;return !!S.wins[gt.need]}
-function respawnNow(){S.hp=maxHp();ROVD.clear();const h=S.heal||{m:'world',x:3,y:OY+87};W.load(h.m,h.x,h.y,0);S.pos={m:h.m,x:h.x,y:h.y,d:0};W.H.cd=2;save()}
+function respawnNow(){S.hp=maxHp();ROVD.clear();const h=window.PRO?{m:'world',x:11,y:3553}:(S.heal||{m:'world',x:3,y:OY+87});W.load(h.m,h.x,h.y,0);S.pos={m:h.m,x:h.x,y:h.y,d:0};W.H.cd=2;save()}
 function objective(){
  if(!S.sp['人'])return 'va voir <b>Maître Genzō</b> au dojo (le toit bleu).';
  if(!S.fl.act1&&!S.les.l1)return 'va voir <b>Maître Tanuki</b>, sur la place du village : il t\'apprendra tes premières phrases.';
@@ -11768,6 +11770,7 @@ const NR={"mini": ["#######.#######", "#......M......#", "#.............#", "#..
  /* une question sur un kana : lecture, ou l'inverse (trouver le kana d'après le son) */
  const kanaQ=(c,pool)=>{const r=readOf(c),others=shuf(pool.filter(x=>x!==c&&readOf(x)!==r));if(Math.random()<.3&&[...c].length===1){const o=others.slice(0,3);return{q:'mcq',p:`Quel kana se lit « ${r} » ?`,a:c,o:shuf([c,...o])}}
   return{q:'mcq',p:'Comment se lit ceci ?',big:c,a:r,o:shuf([r,...others.slice(0,3).map(readOf)])}};
+ window.PROK={known,readOf,kanaQ,kat:c=>KATA.includes(c)||KDAK.some(x=>x[0]===c)||KSMALL.some(x=>x[0]===c),words:()=>allW};
  const wordQ=([w,fr])=>({q:'mcq',p:'Que veut dire ce mot ?',big:w,a:fr,o:shuf([fr,...shuf(allW.filter(x=>x[1]!==fr)).slice(0,3).map(x=>x[1])])});
  async function traceRow(l){const chars=[...l.row];
   for(const c of chars){if(!KANA[c])continue;UI.panel('pad');await D.say({n:TN,jp:[c],fr:`Se lit « ${rd(c)} ».`},{nolearn:1});const r=await Trace.run({k:c,name:rd(c),fr:l.kat?'katakana':'hiragana',kun:c,on:c,s:KANA[c]});if(!r){UI.panel('pad');return false}}
@@ -13632,6 +13635,25 @@ window.KREAD={"一":[["kun","ひと(つ)","一つ","ひとつ","un (objet)",""],
    fx.globalCompositeOperation='destination-in';fx.drawImage(toC(W,H,new Uint8ClampedArray(N*4).fill(255),m),0,0);
    out=cv(W,H);const ox=out.getContext('2d');try{ox.filter=`blur(${Math.max(2,W/12).toFixed(1)}px)`}catch(e){}ox.globalAlpha=.9;ox.drawImage(f,0,0);ox.drawImage(f,0,0);try{ox.filter='none'}catch(e){}ox.globalAlpha=1;ox.drawImage(f,0,0)}}}catch(e){out=null}LC.set(im,out);return out};
  window.LGW={};for(const k in LG)LGW[k]=im=>lit(k,im);
+})();
+
+/* ===================== v346 : prologue — les yōkai des hautes herbes se combattent avec les kana appris ===================== */
+(()=>{
+ const pk=a=>a[Math.floor(Math.random()*a.length)];
+ /* une question de kana (ou un mot du prologue fait de kana connus) */
+ window.PROQ=()=>{try{const k=PROK.known();if(k.length<4)return null;const ws=PROK.words().filter(([w])=>[...w].every(c=>k.includes(c)));
+  if(ws.length>=4&&Math.random()<.3){const[w,fr]=pk(ws),o=[fr];for(const x of shuf(ws))if(o.length<4&&!o.includes(x[1]))o.push(x[1]);return{q:'mcq',p:'Que veut dire ce mot ?',big:w,a:fr,o:shuf(o)}}
+  return PROK.kanaQ(pk(k),k)}catch(e){return null}};
+ /* les yōkai du prologue : doux, et leur nom est un mot en kana connus */
+ const KINDS=['yoma','kodama','kakashi','itachi','takenoko','karakasa','chochin','tesso','toad'];
+ window.PROWILD=()=>{const k=PROK.known(),n=k.length,kind=pk(KINDS.filter(x=>RKIND[x])),d=STORY.wildDef(1,kind),ws=PROK.words().filter(([w])=>[...w].every(c=>k.includes(c))),w=ws.length?pk(ws):null;
+  Object.assign(d,{lv:1+Math.min(4,Math.floor(n/16)),hp:24+Math.min(40,n),dmg:5+Math.min(6,Math.floor(n/14)),xp:3,gold:2,trait:null});
+  if(w){d.t=[w[0]];d.sub=w[1];d.word={t:[w[0]],fr:w[1]};d.clue=`Il a volé le mot « ${w[1]} ».`}return d};
+ const oW=STORY.wild;STORY.wild=async function(z){if(window.PRO&&window.PROK)return Battle.start(PROWILD(),{zone:1});return oW.apply(this,arguments)};
+ /* pas de rencontre tant qu'on ne connaît pas au moins les cinq voyelles */
+ const oE=window.ENCMUL;window.ENCMUL=()=>{if(window.PRO){try{return PROK.known().length>=5?.8:0}catch(e){return 0}}return oE?oE():1};
+ /* la clôture du nord : Maître Tanuki explique pourquoi on ne passe pas, au lieu d'un simple « bonk » */
+ const oP=window.XPUSH;window.XPUSH=(m,x,y,dx,dy,d)=>{if(window.PRO&&m==='world'&&y<=3514&&dy<0){const t=Date.now();if(!(window.__pf>t)){window.__pf=t+12000;W.ev(()=>D.say([{n:'Maître Tanuki',t:"Hé ! Au-delà de la clôture, c'est la grande route. Pas question d'y aller avant de savoir lire. Même les panneaux sont en japonais, figure-toi."}]))}return true}return oP?oP(m,x,y,dx,dy,d):false};
 })();
 
 /* traductions générées (i18n/merge.py) */
